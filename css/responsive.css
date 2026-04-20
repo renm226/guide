@@ -1,0 +1,279 @@
+/* ============================================================
+   APEXPROTOCOL — RESPONSIVE OVERRIDES
+
+
+/* ── MOBILE HAMBURGER & OVERLAY CONTROLS ─────────────────── */
+.mob-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border2);
+  border-radius: 2px;
+  background: var(--surf2);
+  color: var(--muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 16px;
+  transition: all .2s;
+}
+.mob-menu-btn:hover { color: var(--text); border-color: var(--dim); }
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 49;
+  backdrop-filter: blur(2px);
+}
+.sidebar-overlay.show { display: block; }
+
+/* ── MOBILE BOTTOM NAVIGATION ────────────────────────────── */
+.mob-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 52px;
+  background: rgba(6,6,15,0.97);
+  border-top: 1px solid var(--border2);
+  backdrop-filter: blur(12px);
+  z-index: 40;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.mob-bottom-nav::-webkit-scrollbar { display: none; }
+.mob-nav-inner {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  min-width: max-content;
+  height: 100%;
+}
+.mob-nav-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .6px;
+  padding: 6px 12px;
+  border-radius: 2px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+  text-transform: uppercase;
+  -webkit-tap-highlight-color: transparent;
+}
+.mob-nav-pill[data-area="ai"].active    { background: var(--ai-dim);      border-color: var(--ai-border);      color: var(--ai); }
+.mob-nav-pill[data-area="net"].active   { background: var(--net-dim);     border-color: var(--net-border);     color: var(--net); }
+.mob-nav-pill[data-area="hack"].active  { background: var(--hack-dim);    border-color: var(--hack-border);    color: var(--hack); }
+.mob-nav-pill[data-area="soft"].active  { background: var(--soft-dim);    border-color: var(--soft-border);    color: var(--soft); }
+.mob-nav-pill[data-area="crypto"].active{ background: var(--crypto-dim);  border-color: var(--crypto-border);  color: var(--crypto); }
+.mob-nav-pill[data-area="cloud"].active { background: var(--cloud-dim);   border-color: var(--cloud-border);   color: var(--cloud); }
+.mob-nav-pill[data-area="mobile"].active{ background: var(--mobile-dim);  border-color: var(--mobile-border);  color: var(--mobile); }
+.mob-nav-pill[data-area="devsec"].active{ background: var(--devsec-dim);  border-color: var(--devsec-border);  color: var(--devsec); }
+.mob-nav-pill[data-area="selfdev"].active{ background: var(--selfdev-dim);border-color: var(--selfdev-border); color: var(--selfdev); }
+
+/* ── BREAKPOINT: TABLET (max 900px) ──────────────────────── */
+@media (max-width: 900px) {
+  /* Tighten header */
+  .site-header { padding: 0 14px; gap: 8px; }
+  .logo { font-size: 17px; letter-spacing: 2px; }
+
+  /* Shrink nav pills */
+  .npill { font-size: 9px; padding: 4px 9px; }
+
+  /* Hide export, shrink coffee */
+  .export-btn { display: none; }
+  .coffee-btn { font-size: 9px; padding: 5px 10px; }
+
+  /* Sidebar narrower */
+  .sidebar { width: 170px; }
+
+  /* Hero tighter */
+  .disc-hero { padding: 20px 22px 14px; }
+  .disc-title { font-size: 30px; letter-spacing: 2px; }
+  .disc-sub { font-size: 12px; }
+  .disc-stats { gap: 14px; }
+  .stat-val { font-size: 22px; }
+
+  /* Phases padding */
+  .phases { padding: 16px 22px 48px; }
+
+  /* Topics grid: 2 cols max */
+  .topics-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+}
+
+/* ── BREAKPOINT: MOBILE (max 640px) ──────────────────────── */
+@media (max-width: 640px) {
+  /* Show hamburger */
+  .mob-menu-btn { display: flex; }
+
+  /* Show bottom nav, hide desktop nav pills */
+  .mob-bottom-nav { display: block; }
+  .nav-scroll { display: none; }
+
+  /* Add body padding for bottom nav */
+  body { padding-bottom: 52px; }
+
+  /* Header compact */
+  .site-header { padding: 0 12px; height: 48px; gap: 8px; }
+  .logo { font-size: 16px; letter-spacing: 2px; }
+  .coffee-btn { font-size: 9px; padding: 5px 9px; gap: 3px; }
+
+  /* Sidebar: slide-over drawer */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 240px;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform .28s cubic-bezier(.4,0,.2,1);
+    padding-top: 60px; /* clear the header */
+    border-right: 1px solid var(--border2);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.5);
+  }
+  .sidebar.mob-open { transform: translateX(0); }
+
+  /* Phase nav items bigger tap targets */
+  .phase-nav-item { padding: 10px 16px; font-size: 12px; }
+  .phase-nav-item .ph-num { width: 22px; height: 22px; font-size: 10px; }
+
+  /* Layout: full width */
+  .layout { display: block; overflow: visible; }
+  .main { height: calc(100vh - 48px - 2px - 52px); overflow-y: auto; }
+
+  /* Hero */
+  .disc-hero {
+    padding: 14px 14px 10px;
+    position: sticky; top: 0; z-index: 5;
+  }
+  .disc-eyebrow { font-size: 8px; letter-spacing: 2px; margin-bottom: 4px; }
+  .disc-title { font-size: 22px; letter-spacing: 2px; margin-bottom: 4px; }
+  .disc-sub { font-size: 11px; margin-bottom: 10px; }
+  .disc-stats { gap: 10px; flex-wrap: nowrap; }
+  .stat-val { font-size: 18px; }
+  .stat-label { font-size: 7px; }
+
+  /* Phases */
+  .phases { padding: 10px 10px 60px; }
+  .phase-block { margin-bottom: 4px; }
+
+  /* Phase header bigger tap target */
+  .phase-header { padding: 14px 12px; gap: 10px; }
+  .phase-num { width: 30px; height: 30px; font-size: 15px; }
+  .phase-name { font-size: 13px; }
+  .phase-tagline { font-size: 10px; }
+
+  /* Level badge */
+  .level-badge { font-size: 7px; padding: 2px 5px; }
+
+  /* Phase body */
+  .phase-body { padding: 0 10px 12px; }
+  .phase-desc { font-size: 11px; padding: 8px 0 10px; }
+
+  /* Topics: single column on mobile */
+  .topics-grid { grid-template-columns: 1fr; gap: 6px; }
+
+  /* Topic card */
+  .topic-head { padding: 12px 10px; }
+  .topic-name { font-size: 12px; }
+  .topic-tag { font-size: 7px; padding: 2px 5px; }
+  .topic-body-inner { padding: 0 10px 10px; }
+  .topic-desc { font-size: 11px; }
+  .master-list li { font-size: 10px; padding: 4px 0 4px 14px; }
+  .deep-dive p { font-size: 10px; }
+
+  /* Modals: full screen on mobile */
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .modal {
+    width: 100%;
+    max-width: 100%;
+    max-height: 88vh;
+    border-radius: 8px 8px 0 0;
+    padding: 20px 16px;
+    border-left: none; border-right: none; border-bottom: none;
+  }
+  .modal h2 { font-size: 22px; }
+  .modal p { font-size: 11px; }
+  .modal-areas { grid-template-columns: 1fr; gap: 6px; }
+  .modal-area-btn { padding: 10px 12px; }
+
+  .coffee-modal {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 8px 8px 0 0;
+    padding: 24px 16px;
+    border-left: none; border-right: none; border-bottom: none;
+  }
+  .coffee-icon { font-size: 36px; margin-bottom: 8px; }
+  .coffee-modal h2 { font-size: 24px; }
+  .coffee-modal p { font-size: 12px; }
+  .coffee-amounts { gap: 6px; }
+  .amount-chip { font-size: 10px; padding: 6px 10px; }
+
+  /* Pull indicator for bottom sheets */
+  .modal::before,
+  .coffee-modal::before {
+    content: '';
+    display: block;
+    width: 36px; height: 4px;
+    background: var(--dim);
+    border-radius: 2px;
+    margin: 0 auto 16px;
+  }
+
+  /* Bigger buttons on mobile */
+  .btn-primary, .btn-secondary { padding: 10px 20px; font-size: 10px; }
+  .paypal-btn { padding: 14px 24px; font-size: 14px; }
+
+  /* Modal actions stack on tiny screens */
+  .modal-actions { flex-direction: column-reverse; gap: 6px; }
+  .modal-actions button { width: 100%; justify-content: center; }
+}
+
+/* ── BREAKPOINT: SMALL MOBILE (max 380px) ────────────────── */
+@media (max-width: 380px) {
+  .logo { font-size: 14px; }
+  .coffee-btn { display: none; } /* hide to save space, coffee still in sidebar */
+  .disc-title { font-size: 20px; }
+  .stat-val { font-size: 16px; }
+}
+
+/* ── TOUCH IMPROVEMENTS ──────────────────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover states that don't work on touch */
+  .npill:hover, .mob-nav-pill:hover,
+  .phase-header:hover, .topic-card:hover { background: transparent; }
+
+  /* Prevent tap highlight flash */
+  .phase-header, .topic-card, .phase-nav-item,
+  .npill, .mob-nav-pill, .amount-chip,
+  .modal-area-btn, .coffee-btn, .export-btn {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Bigger chevron for touch */
+  .phase-chevron { font-size: 16px; padding: 4px; }
+}
+
+/* ── SAFE AREA (iPhone notch/home bar) ───────────────────── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .mob-bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(52px + env(safe-area-inset-bottom));
+  }
+  @media (max-width: 640px) {
+    body { padding-bottom: calc(52px + env(safe-area-inset-bottom)); }
+    .main { height: calc(100vh - 48px - 2px - 52px - env(safe-area-inset-bottom)); }
+  }
+}

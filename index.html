@@ -8,29 +8,45 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+
+<link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
 
 <header class="site-header">
   <div class="logo">APEX<span>Protocol</span></div>
+  <!-- Desktop nav pills (hidden on mobile, replaced by bottom nav) -->
   <div class="nav-scroll" id="navScroll"></div>
   <div class="header-actions">
     <!-- <button class="export-btn" onclick="window.openExportModal()">⬇ Export PDF</button> -->
     <button class="coffee-btn" onclick="window.openCoffeeModal()">☕ Buy Coffee</button>
+    <!-- Hamburger: only visible on mobile -->
+    <button class="mob-menu-btn" id="mobMenuBtn" aria-label="Open phases menu">☰</button>
   </div>
 </header>
-<div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+
+<div class="progress-bar" id="progressBar">
+  <div class="progress-fill" id="progressFill"></div>
+</div>
 
 <div class="layout" id="layout" data-current="ai">
+  <!-- Overlay behind mobile sidebar drawer -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="window.closeMobileSidebar()"></div>
+
   <aside class="sidebar" id="sidebar"></aside>
   <main class="main" id="main" onscroll="window.updateProgress()"></main>
 </div>
+
+<!-- MOBILE BOTTOM NAVIGATION (area switcher) -->
+<nav class="mob-bottom-nav" id="mobBottomNav" aria-label="Discipline navigation">
+  <div class="mob-nav-inner" id="mobNavInner"></div>
+</nav>
 
 <!-- EXPORT MODAL -->
 <div class="modal-overlay" id="exportModal" onclick="window.closeModalIfOverlay(event,'exportModal')">
   <div class="modal">
     <h2>Export Guide</h2>
-    <p>Select a discipline to export as a print-ready PDF guide. The exported document includes all phases, topics, mastery checklists, deep-dives, code snippets, and resources — formatted for printing or digital reference.</p>
+    <p>Select a discipline to export as a print-ready PDF guide. The exported document includes all phases, topics, mastery checklists, deep-dives, code snippets, and resources.</p>
     <div class="modal-areas" id="modalAreas"></div>
     <div class="modal-actions">
       <button class="btn-secondary" onclick="window.closeModal('exportModal')">Cancel</button>
@@ -71,6 +87,8 @@
 <script src="data/devsec.js"></script>
 <script src="data/selfdev.js"></script>
 <script src="js/main.js"></script>
+<!-- ADD THIS LINE after main.js -->
+<script src="js/responsive.js"></script>
 
 </body>
 </html>
