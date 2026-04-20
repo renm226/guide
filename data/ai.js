@@ -1,291 +1,575 @@
 const aiData = {
-  name: "ARTIFICIAL INTELLIGENCE & ML",
+  name: "ARTIFICIAL INTELLIGENCE & MACHINE LEARNING",
   area: "ai",
   eyebrow: "Machine Intelligence · Deep Learning · LLMs · Research Frontier",
-  sub: "From first-principles mathematics to frontier research. Build, train, and understand intelligent systems at a level that lets you push the field forward. Every algorithm derived, every system implemented from scratch.",
+  sub: "From first-principles mathematics to frontier research. A complete journey from knowing nothing about AI to building and understanding state-of-the-art systems. Every concept grounded, every technique understood deeply — not just used.",
   phases: [
     {
-      name: "Mathematical Bedrock",
+      name: "Mathematical Foundations",
       level: "foundation",
       tagline: "The language all of AI is written in",
-      desc: "No shortcut exists here. Every technique in machine learning is applied mathematics. Fluency — not familiarity — in linear algebra, calculus, probability, information theory, and optimization is non-negotiable. Derive before you implement.",
+      desc: "There are no shortcuts here. Every machine learning algorithm is applied mathematics. You need genuine fluency — not just familiarity — in linear algebra, calculus, probability, and statistics. Spend real time here. Skipping this phase means you will always be guessing at what your models are doing.",
       topics: [
         {
-          name: "Linear Algebra — Complete Mastery",
+          name: "Linear Algebra for ML",
           tag: "core",
-          desc: "Vectors, matrices, tensors. Eigendecomposition derived from first principles. SVD as the fundamental decomposition of linear maps. PCA from covariance matrix eigenvector interpretation. Understand every operation geometrically: matrix multiplication as transformation, eigenvalues as scaling factors, orthogonal matrices as rotations.",
+          desc: "Vectors and matrices are the native data structures of machine learning. You need to understand them geometrically, not just computationally. A matrix is a linear transformation — it rotates, scales, and shears space. Matrix multiplication is function composition. The determinant measures how a transformation scales area or volume. Eigenvalues are the stretching factors along special directions (eigenvectors). Singular Value Decomposition (SVD) is the fundamental decomposition of any linear map and underlies PCA, recommender systems, and many optimization algorithms. Understand the column space, null space, rank, and rank-nullity theorem. Get comfortable with inner products, norms, orthogonality, and projections.",
           master: [
-            "Derive SVD from scratch: prove AᵀA = VΣᵀΣVᵀ",
-            "Implement PCA from covariance matrix without sklearn",
-            "Understand column space, null space, rank-nullity theorem",
-            "Implement least-squares regression via normal equations (XᵀX)⁻¹Xᵀy",
-            "Implement Gram-Schmidt orthogonalization from scratch",
-            "Prove that the Frobenius norm of a matrix equals the L2 norm of its singular values",
-            "Implement power iteration to find dominant eigenvectors"
+            "Explain matrix multiplication as a composition of linear transformations geometrically",
+            "Derive PCA from the covariance matrix eigenvector interpretation — not just the formula",
+            "Understand SVD intuitively: left singular vectors, singular values, and right singular vectors",
+            "Know when a system of linear equations has 0, 1, or infinite solutions and why",
+            "Understand the Gram-Schmidt process and why orthonormal bases matter",
+            "Explain the geometric meaning of a matrix determinant",
+            "Understand least-squares regression as a projection onto the column space"
           ],
-          deepdive: "The connection between SVD and PCA is not just mathematical elegance — it's the foundation of every dimensionality reduction technique. When you compute the SVD of a centered data matrix X = UΣVᵀ, the right singular vectors V are the principal components. Understanding this means you can derive PCA, LSA (in NLP), collaborative filtering, and even certain GAN training dynamics from a single decomposition.",
-          code: "import numpy as np\n\n# SVD from scratch via power iteration\ndef svd_power(A, k=3, iters=100):\n    m, n = A.shape\n    V = np.random.randn(n, k)\n    V, _ = np.linalg.qr(V)\n    for _ in range(iters):\n        U = A @ V\n        U, S_diag, _ = np.linalg.svd(U, full_matrices=False)\n        U = U[:, :k]\n        S = S_diag[:k]\n        V = A.T @ U / S\n        V, _ = np.linalg.qr(V)\n    return U, S, V.T",
+          deepdive: "The connection between SVD and PCA is the most important relationship in unsupervised ML. When you compute the SVD of a mean-centered data matrix, the right singular vectors are exactly the principal components. This single insight lets you derive PCA, Latent Semantic Analysis in NLP, collaborative filtering in recommender systems, and image compression — all from one decomposition. Master SVD and you understand the geometry of data.",
           res: [
-            "Linear Algebra (Gilbert Strang MIT OCW — free)",
-            "Essence of Linear Algebra (3Blue1Brown)",
-            "Matrix Cookbook (Petersen — free PDF)",
-            "Numerical Linear Algebra (Trefethen & Bau)"
+            "Linear Algebra (Gilbert Strang — MIT OCW, free)",
+            "Essence of Linear Algebra (3Blue1Brown YouTube series)",
+            "Matrix Cookbook (Petersen & Pedersen — free PDF reference)",
+            "Mathematics for Machine Learning (Deisenroth et al. — free PDF)"
           ]
         },
         {
-          name: "Multivariable Calculus & Optimization",
+          name: "Calculus and Optimization",
           tag: "core",
-          desc: "Chain rule is the soul of backpropagation. Partial derivatives, Jacobians, Hessians. Convex optimization: KKT conditions, Lagrange multipliers, strong and weak duality. Second-order methods (Newton's method, quasi-Newton L-BFGS). Non-convex optimization: saddle points, local minima, the role of noise. Understand the implicit regularization of SGD.",
+          desc: "The chain rule is the soul of backpropagation. You need deep comfort with partial derivatives, Jacobians (matrices of partial derivatives), and Hessians (matrices of second derivatives). Understand gradient descent intuitively: you are always walking downhill on a loss surface. Learn the distinction between convex optimization (guaranteed global minimum, KKT conditions, duality) and non-convex optimization (the reality of deep learning). Understand why saddle points dominate in high-dimensional spaces and why local minima are less of a problem than people assume. Learn momentum, adaptive learning rates, and why second-order methods (Newton, quasi-Newton) are powerful but expensive.",
           master: [
-            "Derive backpropagation from chain rule on a computational graph manually",
-            "Implement gradient descent, SGD, momentum, Adam from scratch with math",
-            "Prove convexity of cross-entropy loss for logistic regression",
-            "Derive KKT conditions and solve a constrained optimization by hand",
-            "Implement L-BFGS and understand the Hessian approximation",
-            "Understand why saddle points dominate local minima in high-dimensional loss landscapes",
-            "Derive the natural gradient and understand why it's Fisher-information-scaled"
+            "Derive the gradient of cross-entropy loss with respect to logits manually",
+            "Explain why saddle points outnumber local minima exponentially as dimensions grow",
+            "Understand KKT conditions for constrained optimization and how they apply to SVMs",
+            "Know the difference between a Jacobian-vector product (JVP) and vector-Jacobian product (VJP)",
+            "Derive the update rule for gradient descent with momentum from first principles",
+            "Understand why the learning rate is the single most impactful hyperparameter",
+            "Explain the concept of the loss landscape and why flat minima generalize better"
           ],
-          deepdive: "The natural gradient (Amari 1998) is perhaps the most underrated optimization concept. Standard gradient descent treats parameter space as Euclidean, but neural network parameter space has a Riemannian geometry given by the Fisher Information Matrix. The natural gradient pre-multiplies the standard gradient by F⁻¹, making the update distribution-aware. This is why K-FAC and related second-order methods outperform Adam in large-scale training.",
+          deepdive: "The natural gradient (Amari, 1998) is the most underrated optimization concept in deep learning. Standard gradient descent treats parameter space as Euclidean, but it isn't — the same parameter change can have drastically different effects depending on the current values. The natural gradient corrects for the geometry of the parameter space using the Fisher Information Matrix, making the update invariant to reparameterization. This is why K-FAC and similar second-order methods can train faster with fewer steps.",
           res: [
-            "Convex Optimization (Boyd & Vandenberghe — free PDF)",
-            "Numerical Optimization (Nocedal & Wright)",
-            "Mathematics for ML (Deisenroth — free PDF)",
-            "Natural Gradient Works Efficiently in Learning (Amari 1998)"
+            "Calculus (MIT OCW 18.01 and 18.02 — free)",
+            "Convex Optimization (Boyd & Vandenberghe — free PDF, canonical reference)",
+            "Numerical Optimization (Nocedal & Wright — graduate level)",
+            "The Matrix Calculus You Need For Deep Learning (Parr & Howard — free)"
           ]
         },
         {
-          name: "Probability, Statistics & Information Theory",
+          name: "Probability and Statistics",
           tag: "core",
-          desc: "Probability theory with measure-theoretic foundations. Random variables, expectation, variance, moment generating functions. Exponential family distributions. MLE, MAP, Bayesian inference, conjugate priors. MCMC (Metropolis-Hastings, Hamiltonian Monte Carlo). Shannon entropy, mutual information, KL divergence — not just formulas but their meaning in learning theory.",
+          desc: "Machine learning is fundamentally about uncertainty — modeling it, reducing it, and reasoning under it. You need probability theory as a language for uncertainty, not just a bag of formulas. Understand random variables, expectation, variance, covariance, and the central limit theorem. Master the major distributions: Gaussian, Bernoulli, Categorical, Poisson, Exponential, Dirichlet, and the exponential family they all belong to. Learn the distinction between frequentist and Bayesian inference. Maximum Likelihood Estimation (MLE) and Maximum A Posteriori (MAP) are the workhorses — understand both from first principles. Bayes' theorem is the fundamental theorem of learning from evidence.",
           master: [
-            "Derive MLE for Gaussian, Bernoulli, Categorical, Dirichlet",
-            "Derive ELBO (Evidence Lower Bound) from scratch for VAEs",
-            "Implement Metropolis-Hastings from scratch and sample from a banana distribution",
-            "Prove that cross-entropy loss = NLL under the model's distribution",
-            "Derive mutual information from KL divergence: I(X;Y) = KL(p(x,y)||p(x)p(y))",
-            "Implement Hamiltonian Monte Carlo and compare mixing vs MH",
-            "Connect Fisher information to the curvature of the log-likelihood"
+            "Derive MLE for a Gaussian, Bernoulli, and Categorical distribution from scratch",
+            "Explain the difference between MLE and MAP with a concrete example",
+            "Understand the bias-variance tradeoff as a decomposition of expected test error",
+            "Know what a conjugate prior is and why the Beta-Bernoulli pair is useful",
+            "Explain the central limit theorem and why it matters for ML in practice",
+            "Understand what a p-value actually means and common misinterpretations",
+            "Derive the law of total expectation and law of total variance"
           ],
-          deepdive: "The ELBO is the engine of modern generative modeling. For a latent variable model p(x) = ∫p(x|z)p(z)dz, the intractable marginal is lower-bounded by E_q[log p(x|z)] - KL(q(z|x)||p(z)). The first term is reconstruction accuracy; the second is a regularizer. When you train a VAE, a GAN, a diffusion model — you are maximizing some form of this bound. Every generative model is a different variational approximation.",
+          deepdive: "KL divergence is not just a loss function — it is the measure of information gain when you update your beliefs. The Evidence Lower Bound (ELBO) in variational inference is a direct consequence of KL divergence: log p(x) ≥ E_q[log p(x|z)] - KL(q(z|x)||p(z)). The first term rewards reconstruction accuracy; the second penalizes deviation from the prior. Every generative model from VAEs to diffusion models optimizes some form of this bound.",
           res: [
-            "All of Statistics (Wasserman)",
-            "Pattern Recognition and ML (Bishop — free PDF)",
-            "Information Theory, Inference, Learning Algorithms (MacKay — free)",
-            "Elements of Information Theory (Cover & Thomas)"
+            "All of Statistics (Larry Wasserman — rigorous and accessible)",
+            "Probability Theory: The Logic of Science (Jaynes — Bayesian perspective)",
+            "Pattern Recognition and Machine Learning (Bishop — free PDF, canonical)",
+            "Think Stats (Allen Downey — free, practical introduction)"
+          ]
+        },
+        {
+          name: "Information Theory",
+          tag: "advanced",
+          desc: "Information theory is the bridge between probability and learning. Shannon entropy H(X) = -Σ p(x) log p(x) measures the average surprise in a distribution — equivalently, the minimum bits needed to encode it. Cross-entropy loss in classification is exactly the negative log-likelihood under the model's predicted distribution. KL divergence D_KL(P||Q) measures how much information is lost when you approximate P with Q. Mutual information I(X;Y) measures how much knowing X reduces uncertainty about Y. These concepts unify compression, communication, and learning in one framework.",
+          master: [
+            "Prove that cross-entropy loss equals negative log-likelihood for a categorical model",
+            "Explain why KL divergence is asymmetric and when that asymmetry matters",
+            "Derive mutual information from KL divergence: I(X;Y) = KL(p(x,y) || p(x)p(y))",
+            "Understand the data processing inequality and why it matters for representation learning",
+            "Connect entropy to the concept of model capacity and overfitting",
+            "Explain why minimizing cross-entropy is equivalent to maximizing likelihood",
+            "Understand the information bottleneck principle and its connection to deep learning"
+          ],
+          res: [
+            "Information Theory, Inference, and Learning Algorithms (MacKay — free PDF, excellent)",
+            "Elements of Information Theory (Cover & Thomas — the textbook)",
+            "Shannon's original 1948 paper — A Mathematical Theory of Communication",
+            "Visual Information Theory (colah.github.io — beautiful intuitive intro)"
           ]
         }
       ]
     },
     {
-      name: "Classical ML — Algorithmic Level",
-      level: "intermediate",
-      tagline: "Algorithms that still dominate production",
-      desc: "Before deep learning, and alongside it. Master every algorithm at the derivation and implementation level. sklearn is for prototyping — you should be able to write every algorithm yourself.",
+      name: "Classical Machine Learning",
+      level: "foundation",
+      tagline: "The algorithms that still dominate production",
+      desc: "Before neural networks, and alongside them in industry. Classical ML algorithms are interpretable, fast, and often outperform deep learning on tabular data. Master every algorithm at the derivation level — not just the API call. scikit-learn is for prototyping; you should understand every algorithm deeply enough to implement it.",
       topics: [
         {
-          name: "Supervised Learning from Scratch",
+          name: "Supervised Learning Algorithms",
           tag: "core",
-          desc: "Linear regression (normal equations + gradient descent forms). Logistic regression (derive sigmoid from maximum entropy principle). Decision trees (information gain, Gini, CART algorithm, cost-complexity pruning). SVMs (primal and dual formulation, kernel trick via Mercer's theorem, soft margin, sequential minimal optimization). Regularization: Ridge (L2), Lasso (L1, why it produces sparsity via KKT), ElasticNet.",
+          desc: "Linear regression (normal equations and gradient descent formulations, regularization via Ridge and Lasso). Logistic regression (derive from the maximum entropy principle — logistic regression is the maximum entropy binary classifier). Decision trees (CART algorithm, information gain, Gini impurity, cost-complexity pruning). Support Vector Machines (SVM) from primal to dual formulation via Lagrangian duality, the kernel trick via Mercer's theorem, soft-margin SVM. Understand bias-variance tradeoff, overfitting, underfitting, and cross-validation. Learn regularization intuitively: L1 produces sparsity (corners of the L1 ball), L2 shrinks weights smoothly.",
           master: [
-            "Derive logistic regression gradient: ∂L/∂w = Xᵀ(σ(Xw) - y)",
-            "Implement CART decision tree including cost-complexity pruning",
-            "Derive SVM dual from primal using Lagrangian: maximise Σαᵢ - ½ΣΣαᵢαⱼyᵢyⱼK(xᵢ,xⱼ)",
-            "Prove why L1 regularization produces sparsity using KKT stationarity",
-            "Implement kernel SVM with RBF kernel from scratch",
-            "Derive bias-variance decomposition from expected generalization error",
-            "Implement isotonic regression"
+            "Derive the normal equation for linear regression and explain when it fails numerically",
+            "Explain why L1 regularization produces sparse solutions using a geometric argument",
+            "Understand the SVM dual problem and why it only depends on inner products (enabling kernels)",
+            "Implement k-fold cross-validation correctly — understand why you must not touch the test set",
+            "Explain the kernel trick: you never compute φ(x) explicitly, only K(x,x') = φ(x)·φ(x')",
+            "Derive the information gain splitting criterion for decision trees",
+            "Explain cost-complexity pruning and why a fully-grown tree overfits"
           ],
-          deepdive: "The kernel trick is far more profound than 'trick'. Mercer's theorem states that any positive semi-definite function K(x, x') implicitly defines a feature map φ such that K(x, x') = φ(x)ᵀφ(x'). This means you can work in infinite-dimensional feature spaces (Gaussian RBF kernel) in O(n²) time — never materializing the feature space. Neural networks' implicit kernel (NTK — Neural Tangent Kernel) is the bridge between classical and deep learning theory.",
+          deepdive: "Mercer's theorem states that any positive semi-definite function K(x,x') defines an implicit feature map φ such that K(x,x') = φ(x)·φ(x'). The Gaussian RBF kernel corresponds to an infinite-dimensional feature space — yet you can operate in it in O(n²) time without ever materializing the features. The Neural Tangent Kernel (NTK) is a kernel that describes infinitely-wide neural networks at initialization — connecting classical kernel methods to deep learning theory.",
           res: [
-            "Pattern Recognition and ML (Bishop)",
-            "ESL — Elements of Statistical Learning (Hastie et al. — free PDF)",
-            "Understanding Machine Learning: From Theory to Algorithms (Shalev-Shwartz)"
+            "The Elements of Statistical Learning (Hastie et al. — free PDF, the bible of classical ML)",
+            "Pattern Recognition and Machine Learning (Bishop)",
+            "Understanding Machine Learning: From Theory to Algorithms (Shalev-Shwartz & Ben-David)",
+            "An Introduction to Statistical Learning (James et al. — free PDF, more accessible)"
           ]
         },
         {
-          name: "Ensemble Methods & Gradient Boosting",
+          name: "Ensemble Methods and Gradient Boosting",
           tag: "advanced",
-          desc: "Random Forests: bagging + random subspace method, OOB error estimation, feature importance via permutation. Gradient Boosting from first principles: functional gradient descent, shrinkage, subsampling. XGBoost (second-order Taylor expansion of loss, regularization in split gain). LightGBM (histogram-based algorithm, leaf-wise growth, GOSS). CatBoost (ordered boosting, symmetric trees). SHAP values for any model.",
+          desc: "Ensembles are the most reliable way to win Kaggle competitions on tabular data. Bagging (bootstrap aggregating) reduces variance by training multiple models on bootstrapped samples — Random Forests are the prime example. Boosting reduces bias by sequentially fitting models to residuals. Gradient Boosting is boosting in function space: each new tree fits the negative gradient of the loss. XGBoost adds second-order Taylor expansion of the loss plus explicit regularization. LightGBM uses histogram-based splits and leaf-wise growth for 10-100× speedups. CatBoost uses ordered boosting to prevent target leakage. SHAP (SHapley Additive exPlanations) provides model-agnostic feature importance grounded in game theory.",
           master: [
-            "Derive gradient boosting update: F_m(x) = F_{m-1}(x) + ν·h_m(x) where h_m fits negative gradient",
-            "Implement AdaBoost from scratch including weight updates",
-            "Derive XGBoost split gain: Gain = ½[G_L²/(H_L+λ) + G_R²/(H_R+λ) - (G_L+G_R)²/(H_L+H_R+λ)] - γ",
-            "Understand why GOSS (Gradient-based One-Side Sampling) maintains accuracy",
-            "Tune LightGBM hyperparameters: num_leaves vs max_depth, min_data_in_leaf",
-            "Implement SHAP TreeExplainer and verify against brute-force game-theoretic values",
-            "Design a stacking ensemble with proper cross-validation to avoid leakage"
+            "Explain how gradient boosting performs functional gradient descent",
+            "Understand why bagging reduces variance and boosting reduces bias",
+            "Know the XGBoost split-gain formula and what each term (lambda, gamma) controls",
+            "Understand GOSS (gradient-based one-side sampling) in LightGBM and why it works",
+            "Use SHAP values to explain individual predictions — not just feature importance",
+            "Design a proper stacking ensemble with out-of-fold predictions to prevent leakage",
+            "Know when to use Random Forest vs XGBoost vs LightGBM vs CatBoost"
           ],
-          code: "# Gradient Boosting from scratch\nclass GradientBooster:\n    def __init__(self, n_est=100, lr=0.1, max_depth=3):\n        self.n_est = n_est\n        self.lr = lr\n        self.max_depth = max_depth\n        self.trees = []\n    \n    def fit(self, X, y):\n        F = np.full(len(y), y.mean())\n        for _ in range(self.n_est):\n            residuals = y - self._sigmoid(F)\n            tree = DecisionTreeRegressor(max_depth=self.max_depth)\n            tree.fit(X, residuals)\n            self.trees.append(tree)\n            F += self.lr * tree.predict(X)\n    \n    def _sigmoid(self, z):\n        return 1 / (1 + np.exp(-z))",
           res: [
-            "XGBoost paper (Chen & Guestrin 2016)",
-            "LightGBM paper (Ke et al. 2017)",
-            "SHAP: A Unified Approach to Interpreting Model Predictions",
-            "Kaggle winning solutions — tabular track"
+            "XGBoost: A Scalable Tree Boosting System (Chen & Guestrin 2016 paper)",
+            "LightGBM: A Highly Efficient Gradient Boosting Decision Tree (Ke et al. 2017)",
+            "A Unified Approach to Interpreting Model Predictions (Lundberg & Lee — SHAP paper)",
+            "Hands-On Machine Learning (Géron — excellent practical chapters on ensembles)"
           ]
         },
         {
-          name: "Unsupervised & Dimensionality Reduction",
+          name: "Unsupervised Learning",
           tag: "core",
-          desc: "Clustering: K-means (derivation as EM for Gaussian mixtures with isotropic covariance), DBSCAN (density-based, reachability plots), hierarchical clustering (linkage criteria, dendrogram interpretation). Dimensionality reduction: PCA (maximizing variance vs minimizing reconstruction error), t-SNE (symmetric SNE, perplexity selection), UMAP (Riemannian geometry foundations, cross-entropy minimization), autoencoders.",
+          desc: "Most data in the world is unlabeled. Clustering groups similar points: K-means (EM algorithm with hard assignments), DBSCAN (density-based, handles arbitrary shapes), Gaussian Mixture Models (soft assignments, full EM). Dimensionality reduction: PCA (linear, maximizes variance), t-SNE (nonlinear, preserves local structure, crowding problem), UMAP (faster, preserves more global structure, Riemannian geometry foundations). Anomaly detection: isolation forest, one-class SVM, autoencoders. Association rules: Apriori algorithm, market basket analysis.",
           master: [
-            "Derive K-means as an EM algorithm with hard assignments",
-            "Implement DBSCAN from scratch including reachability and core points",
-            "Prove that PCA minimizes reconstruction error and maximizes variance simultaneously",
-            "Understand the crowding problem in t-SNE and why UMAP solves it",
-            "Implement a deep autoencoder for MNIST and compare latent spaces",
-            "Derive the t-SNE gradient: ∂C/∂yᵢ = 4 Σⱼ (pᵢⱼ - qᵢⱼ)(yᵢ - yⱼ)(1 + ||yᵢ - yⱼ||²)⁻¹",
-            "Explain when to use UMAP vs t-SNE vs PCA for visualization"
+            "Derive K-means as a special case of EM with isotropic Gaussian components",
+            "Explain the crowding problem in t-SNE and how UMAP addresses it",
+            "Know when to use UMAP vs t-SNE vs PCA for visualization and downstream tasks",
+            "Understand the EM algorithm at a theoretical level: E-step and M-step",
+            "Explain how isolation forest detects anomalies without defining 'normal'",
+            "Know the silhouette score and elbow method for choosing k in K-means",
+            "Implement DBSCAN conceptually: core points, border points, noise points, ε, minPts"
           ],
-          deepdive: "UMAP's theoretical foundation is more rigorous than t-SNE. It assumes the data lies on a Riemannian manifold with a locally constant metric. The manifold is approximated by a fuzzy topological structure (simplicial set), then a low-dimensional representation is found that minimizes cross-entropy between the high-dimensional and low-dimensional fuzzy sets. This explains why UMAP preserves more global structure than t-SNE and is significantly faster.",
           res: [
-            "UMAP: Uniform Manifold Approximation and Projection (McInnes 2018)",
+            "Pattern Recognition and Machine Learning (Bishop — chapters on mixture models and EM)",
+            "UMAP: Uniform Manifold Approximation and Projection (McInnes 2018 paper)",
             "t-SNE paper (van der Maaten & Hinton 2008)",
-            "Dimensionality Reduction: A Comparative Review (van der Maaten)",
-            "Visualizing Data using t-SNE (original paper)"
+            "Hands-On Unsupervised Learning (Ankur Patel)"
           ]
         }
       ]
     },
     {
-      name: "Deep Learning — From Metal to Model",
+      name: "Deep Learning Foundations",
       level: "intermediate",
-      tagline: "Build neural networks from the GPU up",
-      desc: "Implement everything from scratch before using frameworks. Understanding backpropagation at the code level is the dividing line between practitioner and engineer. Then master GPU programming for neural nets.",
+      tagline: "Neural networks from the ground up",
+      desc: "The goal of this phase is to understand neural networks deeply enough to implement them without a framework. Backpropagation is just the chain rule applied to a computational graph — once you see it clearly, it demystifies everything. Only after building from scratch should you use PyTorch or JAX, and then with full understanding of what they are doing.",
       topics: [
         {
-          name: "Autograd Engines & Backpropagation",
+          name: "Backpropagation and Autograd",
           tag: "core",
-          desc: "Forward pass, computational graph construction, backward pass with gradient accumulation. Implementing a full autograd engine (like micrograd or tinygrad). Numerical gradient checking. Jacobian-vector products vs vector-Jacobian products. Higher-order derivatives. Gradient tape pattern vs define-by-run. Understanding TorchScript and torch.compile.",
+          desc: "A neural network is a function composition. The forward pass computes the output; the backward pass computes gradients via the chain rule applied in reverse on the computational graph. Every operation (add, multiply, exp, log) has a local gradient rule. Autograd engines (PyTorch autograd, JAX, TensorFlow) implement this automatically by recording operations and replaying them in reverse. The key concepts are: computational graphs, gradient accumulation, gradient flow, and the define-by-run paradigm. Understanding this layer is what separates practitioners from engineers.",
           master: [
-            "Implement a working autograd engine supporting +, *, tanh, exp, log operations",
-            "Train an MLP on MNIST using your autograd engine",
-            "Verify gradients with finite differences: (f(x+ε)-f(x-ε))/2ε",
-            "Implement Jacobian-vector products for efficient Hessian-vector computation",
-            "Understand vmap (vectorized map) and how it enables per-sample gradients efficiently",
-            "Profile autograd overhead vs manual gradient computation",
-            "Understand gradient checkpointing: trade compute for memory"
+            "Implement a working autograd engine supporting basic operations and train a small MLP on it",
+            "Verify your gradients numerically using finite differences",
+            "Understand the difference between JVPs (forward mode AD) and VJPs (reverse mode AD)",
+            "Explain why reverse-mode AD is preferred for ML (one backward pass for all parameters)",
+            "Understand gradient checkpointing: trading computation for memory",
+            "Know the vanishing and exploding gradient problems and their causes",
+            "Explain how batch normalization and residual connections address gradient flow"
           ],
           res: [
-            "Karpathy micrograd (YouTube + code)",
-            "PyTorch Autograd internals docs",
-            "JAX Sharp Bits — understand JVP vs VJP",
-            "tinygrad source code (George Hotz)"
+            "Micrograd (Andrej Karpathy — 100-line autograd engine, must study)",
+            "The spelled-out intro to backpropagation (Karpathy YouTube)",
+            "JAX documentation: What is JAX? (explains JVP vs VJP clearly)",
+            "Deep Learning (Goodfellow et al. — free PDF, chapter on backpropagation)"
           ]
         },
         {
-          name: "Transformers — Full Implementation",
+          name: "Core Architectures: CNNs, RNNs, and Attention",
           tag: "core",
-          desc: "Multi-head self-attention derived from scratch (QKV projections, scaled dot-product, why √d_k scaling). Causal masking. Rotary positional embeddings (RoPE) and why they outperform sinusoidal. Layer norm vs batch norm — derive both gradients. Encoder-only (BERT), decoder-only (GPT), encoder-decoder (T5). FlashAttention (IO-aware algorithm, tiling strategy). Mixture of Experts (MoE) transformers.",
+          desc: "Convolutional Neural Networks (CNNs): convolution as a shift-equivariant operation, filters, feature maps, pooling, receptive field, depth-width tradeoffs. Key architectures: AlexNet, VGG, ResNet (residual connections — solved the deep training problem), EfficientNet (compound scaling). Recurrent Neural Networks (RNNs): hidden state, vanishing gradient problem in long sequences, LSTM (cell state, forget gate, input gate, output gate — all derived from the problem they solve), GRU as a simplified LSTM. Attention mechanism: soft attention, hard attention, self-attention, multi-head attention as the foundation of Transformers.",
           master: [
-            "Implement complete Transformer from scratch in PyTorch — no nn.Transformer",
-            "Derive why scaled attention uses 1/√d_k: prevents softmax saturation in high-dim",
-            "Implement RoPE positional embeddings and verify rotation equivariance",
-            "Implement FlashAttention tiling strategy (forward pass) in Python",
-            "Train a character-level GPT-2 on custom text data",
-            "Implement grouped query attention (GQA) used in Llama-3",
-            "Profile attention memory: O(n²) vs FlashAttention O(n)",
-            "Implement a simple MoE layer with top-k routing"
+            "Explain why convolutional layers have far fewer parameters than dense layers",
+            "Understand the residual connection: why adding x back enables training of 100+ layer networks",
+            "Derive the LSTM update equations and explain what problem each gate solves",
+            "Understand the attention mechanism: query, key, value — why these names?",
+            "Know how batch normalization works and its effect on the loss landscape",
+            "Explain the receptive field and how it grows with depth",
+            "Understand dropout as ensemble learning and as stochastic regularization"
           ],
-          deepdive: "FlashAttention (Dao et al. 2022) is arguably the most impactful systems paper for LLMs. Standard attention materializes the full n×n attention matrix in HBM (GPU slow memory). FlashAttention computes attention in SRAM tiles, never materializing the full matrix — reducing memory from O(n²) to O(n) and achieving 2-4× speedup. The key insight is IO-awareness: the bottleneck is not FLOPs but memory bandwidth. Understanding this is essential for writing efficient GPU code.",
-          code: "def attention(Q, K, V, mask=None, scale=None):\n    d_k = Q.size(-1)\n    scale = scale or d_k ** -0.5\n    scores = torch.matmul(Q, K.transpose(-2, -1)) * scale\n    if mask is not None:\n        scores = scores.masked_fill(mask == 0, -1e9)\n    weights = F.softmax(scores, dim=-1)\n    return torch.matmul(weights, V), weights",
           res: [
-            "Attention Is All You Need (Vaswani 2017)",
-            "FlashAttention-2 paper (Dao 2023)",
-            "nanoGPT (Karpathy — study the codebase)",
-            "RoPE paper (Su et al. 2022)"
+            "CS231n: Convolutional Neural Networks for Visual Recognition (Stanford — free)",
+            "Deep Learning (Goodfellow et al. — free PDF)",
+            "d2l.ai: Dive into Deep Learning (interactive, free, excellent)",
+            "Neural Networks and Deep Learning (Nielsen — free online, very clear)"
           ]
         },
         {
-          name: "LLM Pre-training, Fine-tuning & Alignment",
-          tag: "advanced",
-          desc: "Data pipelines: Common Crawl filtering, deduplication (exact and fuzzy via MinHash LSH), quality classification. BPE tokenization from scratch. Chinchilla scaling laws (compute-optimal token/parameter ratio). Distributed pre-training: tensor parallelism (Megatron), pipeline parallelism, FSDP, sequence parallelism. SFT on instruction data. RLHF: reward modeling, PPO for LLMs. DPO (bypasses RL — derive why it works). LoRA, QLoRA, GaLore.",
+          name: "Training Deep Networks in Practice",
+          tag: "core",
+          desc: "A theoretically perfect architecture can fail to train due to practical details. Learning rate scheduling (warmup, cosine decay, cyclic LR). Optimizers in depth: SGD + momentum, Adam (adaptive per-parameter learning rates via first and second moment estimates), AdamW (decoupled weight decay — why Adam's weight decay is wrong). Weight initialization (Xavier/Glorot for tanh, Kaiming/He for ReLU — derived from variance preservation). Data augmentation. Transfer learning (fine-tuning vs feature extraction). Mixed precision training (FP16/BF16). Gradient clipping. Early stopping and learning rate scheduling.",
           master: [
-            "Implement BPE tokenizer from scratch matching HuggingFace tokenizers output",
-            "Derive Chinchilla's optimal token budget given a compute constraint C: N* ∝ C^0.5",
-            "Fine-tune a 7B model with QLoRA on a single 24GB GPU",
-            "Derive DPO loss: L = -E[log σ(β(log π_θ(y_w|x)/π_ref(y_w|x) - log π_θ(y_l|x)/π_ref(y_l|x)))]",
-            "Implement GRPO (Group Relative Policy Optimization used in DeepSeek-R1)",
-            "Understand intrinsic dimensionality hypothesis — why LoRA rank 8-64 is sufficient",
-            "Profile distributed training communication overhead with NCCL"
+            "Explain why Kaiming initialization uses √(2/fan_in) for ReLU specifically",
+            "Understand why AdamW's weight decay is correct while Adam's is not",
+            "Design a learning rate schedule with warmup + cosine decay and explain why",
+            "Know the practical differences between batch, mini-batch, and stochastic gradient descent",
+            "Understand when to fine-tune all layers vs freeze early layers in transfer learning",
+            "Explain what happens when you use too large vs too small a batch size",
+            "Know how mixed precision training works and what BF16 vs FP16 tradeoffs are"
           ],
-          deepdive: "GRPO (DeepSeek-R1, 2025) eliminates the value network from PPO by using group-relative reward normalization. For a group of G outputs {o1...oG} per question, advantage = (r - mean(r)) / std(r). This makes RL training far more compute-efficient and is why DeepSeek-R1 achieved o1-level reasoning at a fraction of training cost. Understanding this policy gradient variant is now essential for LLM alignment researchers.",
           res: [
-            "Chinchilla paper (Hoffmann 2022)",
-            "InstructGPT (Ouyang 2022)",
-            "DPO paper (Rafailov 2023)",
-            "DeepSeek-R1 technical report (2025)",
-            "Megatron-LM paper"
+            "A Recipe for Training Neural Networks (Andrej Karpathy blog post — required reading)",
+            "Practical Deep Learning for Coders (fast.ai — free course, excellent practicals)",
+            "Adam: A Method for Stochastic Optimization (Kingma & Ba 2014 paper)",
+            "Bag of Tricks for Image Classification (He et al. 2018 — training best practices)"
           ]
         }
       ]
     },
     {
-      name: "Advanced Architectures & Frontier Research",
-      level: "advanced",
-      tagline: "Push the state of the art",
-      desc: "Diffusion models, graph neural networks, state space models, mechanistic interpretability. These are the active research frontiers where PhDs are being written today.",
+      name: "The Transformer Era",
+      level: "intermediate",
+      tagline: "The architecture that changed everything",
+      desc: "The Transformer (Vaswani et al., 2017) is the most impactful architecture in the history of deep learning. It replaced sequential processing with parallelizable attention, enabling models to scale to billions of parameters. Understanding the Transformer at every level — from matrix operations to training dynamics — is now a baseline requirement for serious ML work.",
       topics: [
         {
-          name: "Diffusion Models — Complete Theory",
-          tag: "advanced",
-          desc: "DDPM forward process: q(x_t|x_0) = N(√ᾱ_t x_0, (1-ᾱ_t)I) — derive the closed form. Reverse process: parameterize with ε-network. ELBO derivation for diffusion (VLB decomposition). Score-based generative models (Song et al.) — score matching objective, connection to diffusion via tweedie's formula. DDIM for deterministic sampling. Classifier-free guidance (derive the modified score). Latent diffusion (Rombach). Flow matching (Lipman).",
+          name: "Transformers from Scratch",
+          tag: "core",
+          desc: "The self-attention mechanism: each position attends to all other positions simultaneously. Queries (Q), Keys (K), and Values (V) are learned linear projections of the input. The attention score between two positions is the dot product of their Q and K vectors, scaled by 1/√d_k to prevent softmax saturation in high dimensions. Multi-head attention learns multiple attention patterns in parallel. Position encodings (sinusoidal original, learned alternatives, RoPE — Rotary Position Embeddings). Layer normalization (pre-norm vs post-norm). Feed-forward layers (position-wise, two linear layers with GELU activation). Encoder-only (BERT), decoder-only (GPT), encoder-decoder (T5) architectures.",
           master: [
-            "Derive DDPM forward process closed form using reparameterization",
-            "Derive that DDPM objective simplifies to E||ε - ε_θ(√ᾱ_t x_0 + √(1-ᾱ_t)ε, t)||²",
-            "Implement a small DDPM on MNIST from scratch",
-            "Derive classifier-free guidance: ε̃ = ε_uncond + w(ε_cond - ε_uncond)",
-            "Understand flow matching and why it's simpler: dφ = u_t dt",
-            "Implement a consistency model for single-step generation",
-            "Compare DDPM vs DDIM sampling: stochastic vs deterministic trajectories"
+            "Implement the full Transformer architecture from scratch in PyTorch without nn.Transformer",
+            "Explain why attention scales by 1/√d_k: the dot product variance grows with dimension",
+            "Understand causal masking in decoder-only models: no attending to future positions",
+            "Explain the difference between encoder and decoder attention patterns",
+            "Understand Rotary Position Embeddings (RoPE) and why they extrapolate better",
+            "Train a character-level language model from scratch on real text data",
+            "Profile the memory usage of a Transformer: where does the O(n²) come from?"
           ],
-          deepdive: "Flow matching (Lipman et al. 2022) reframes generative modeling as learning a vector field that transforms noise to data via ODEs. Unlike diffusion's complex SDE math, flow matching uses a simple regression objective: L = E||v_θ(x_t, t) - u_t||² where u_t is a conditional vector field. The straight-flow variant (SD3, Flux) uses linear interpolation paths, making sampling more efficient than diffusion's curved trajectories.",
+          deepdive: "FlashAttention (Dao et al., 2022) is the most important systems paper for LLMs. Standard attention materializes the full n×n attention matrix in GPU high-bandwidth memory (HBM), which is slow. FlashAttention computes attention in tiles that fit in SRAM (fast on-chip memory), never materializing the full matrix. This achieves the same mathematical result while using O(n) memory instead of O(n²) and running 2-4× faster. The key insight is IO-awareness: the bottleneck is memory bandwidth, not FLOPs.",
           res: [
-            "DDPM (Ho et al. 2020)",
-            "Score-Based Generative Modeling (Song et al. 2020)",
-            "Flow Matching for Generative Modeling (Lipman 2022)",
-            "Stable Diffusion 3 technical report"
+            "Attention Is All You Need (Vaswani et al. 2017 — the original paper)",
+            "The Illustrated Transformer (Jay Alammar blog — best visual explanation)",
+            "nanoGPT (Andrej Karpathy — minimal GPT-2 implementation to study)",
+            "FlashAttention-2 paper (Dao 2023)"
           ]
         },
         {
-          name: "Graph Neural Networks & Geometric DL",
-          tag: "advanced",
-          desc: "Spectral GNNs: graph Laplacian, Fourier transform on graphs, Chebyshev polynomials (ChebNet). Spatial GNNs: message passing framework, GCN (derivation from spectral), GraphSAGE (neighborhood sampling, aggregation functions), GAT (attention coefficients). Graph pooling, graph-level tasks, expressive power of GNNs (Weisfeiler-Lehman hierarchy, WL test limitations).",
+          name: "BERT and Bidirectional Language Models",
+          tag: "core",
+          desc: "BERT (Bidirectional Encoder Representations from Transformers) pre-trained using Masked Language Modeling (MLM) and Next Sentence Prediction (NSP). Fine-tuning BERT: classification, token classification (NER), question answering. The pre-train/fine-tune paradigm. Variants: RoBERTa (better MLM training), DistilBERT (knowledge distillation), ALBERT (parameter sharing), DeBERTa (disentangled attention). Sentence transformers (SBERT) for semantic similarity. Tokenization: WordPiece, BPE, SentencePiece — why subword tokenization?",
           master: [
-            "Derive the graph Laplacian L = D - A and its normalized form L_norm = I - D⁻¹/²AD⁻¹/²",
-            "Implement graph convolution using Chebyshev polynomials",
-            "Derive GCN as a first-order approximation of ChebNet with λ_max ≈ 2",
-            "Implement GraphSAGE with mean, LSTM, and pooling aggregators",
-            "Prove that standard GNNs are at most as powerful as the WL isomorphism test",
-            "Implement GIN (Graph Isomorphism Network) with theoretical guarantees",
-            "Understand over-smoothing: why deep GNNs collapse representations"
+            "Explain why MLM enables bidirectional context and why this is different from GPT",
+            "Understand the [CLS] token and how its embedding is used for classification",
+            "Fine-tune a BERT model for text classification on a custom dataset",
+            "Know the tradeoffs between large vs small BERT variants for production",
+            "Understand knowledge distillation: how DistilBERT retains 97% performance at 40% size",
+            "Explain subword tokenization: why not character-level or word-level?",
+            "Implement semantic search using SBERT embeddings"
           ],
-          deepdive: "The WL test for graph isomorphism is the theoretical upper bound for GNN expressiveness. Standard message-passing GNNs cannot distinguish certain non-isomorphic graphs that the WL test can. GIN (Xu et al.) achieves WL-level expressiveness by using injective neighborhood aggregation: h_v^(k) = MLP((1+ε)·h_v^(k-1) + Σ_u∈N(v) h_u^(k-1)). Understanding this limitation is crucial for designing more powerful GNNs for molecular property prediction and combinatorial tasks.",
           res: [
-            "Semi-Supervised Classification with Graph Convolutional Networks (Kipf 2016)",
-            "Graph Attention Networks (Veličković 2017)",
-            "How Powerful are Graph Neural Networks? (Xu 2018)",
-            "Geometric Deep Learning (Bronstein — foundational blueprint)"
+            "BERT: Pre-training of Deep Bidirectional Transformers (Devlin et al. 2018)",
+            "RoBERTa: A Robustly Optimized BERT Pretraining Approach (Liu et al. 2019)",
+            "The Illustrated BERT (Jay Alammar blog)",
+            "Sentence-BERT paper (Reimers & Gurevych 2019)"
           ]
         },
+        {
+          name: "GPT and Autoregressive Language Models",
+          tag: "advanced",
+          desc: "GPT's decoder-only architecture generates text autoregressively: each token is predicted given all previous tokens. The scaling law story: GPT, GPT-2 (1.5B, released with caution), GPT-3 (175B, few-shot in-context learning, the first 'emergent' capabilities). In-context learning (ICL): learning from examples in the prompt without gradient updates — why does it work? Chain-of-thought prompting. Instruction following. Sampling strategies: greedy, beam search, top-k, top-p (nucleus), temperature. GPT-4 and the move to multimodality.",
+          master: [
+            "Explain why autoregressive generation is O(n²) in attention and how KV-caching helps",
+            "Understand KV-cache: store computed K and V for previous tokens to avoid recomputation",
+            "Know the difference between greedy, top-k, top-p, and temperature sampling",
+            "Explain in-context learning: how a frozen model appears to 'learn' from prompt examples",
+            "Understand emergent capabilities: why do certain abilities appear suddenly at scale?",
+            "Know what perplexity measures and how to interpret it",
+            "Explain why BPE tokenization creates suboptimal token splits for some languages"
+          ],
+          res: [
+            "Language Models are Unsupervised Multitask Learners (GPT-2 paper)",
+            "Language Models are Few-Shot Learners (GPT-3 paper)",
+            "Scaling Laws for Neural Language Models (Kaplan et al. 2020)",
+            "nanoGPT source code (study and implement from scratch)"
+          ]
+        }
+      ]
+    },
+    {
+      name: "LLM Training and Alignment",
+      level: "advanced",
+      tagline: "From pre-training to helpful assistants",
+      desc: "Training modern LLMs requires understanding the full pipeline: data curation, tokenization, distributed pre-training, supervised fine-tuning, and alignment via RLHF or DPO. This is where raw language models become helpful, harmless, and honest assistants. The Chinchilla scaling laws changed how the field thinks about compute-optimal training.",
+      topics: [
+        {
+          name: "Pre-training at Scale",
+          tag: "advanced",
+          desc: "Data pipeline for pre-training: Common Crawl (raw internet text), deduplication (exact via hashing, fuzzy via MinHash LSH), quality filtering (classifier-based, heuristic-based), data mixing across domains. BPE tokenizer training from scratch. Chinchilla scaling laws (Hoffmann et al., 2022): for a given compute budget C, optimal model size N* ∝ C^0.5 and optimal tokens T* ∝ C^0.5 — you should train a smaller model on more tokens than previously believed. Distributed training: data parallelism (DDP), tensor parallelism (Megatron-LM), pipeline parallelism, fully sharded data parallel (FSDP). Learning rate scheduling for long runs.",
+          master: [
+            "Explain the Chinchilla result and why GPT-3 was undertrained by this standard",
+            "Understand data deduplication: why duplicates hurt language modeling",
+            "Know the difference between data parallelism, tensor parallelism, and pipeline parallelism",
+            "Understand gradient checkpointing vs activation recomputation tradeoffs",
+            "Explain ZeRO optimization stages (1, 2, 3) for memory-efficient training",
+            "Know how to implement BPE tokenizer training from a corpus",
+            "Understand the importance of data mixture and domain proportions"
+          ],
+          res: [
+            "Training Compute-Optimal Large Language Models (Chinchilla paper, Hoffmann 2022)",
+            "Megatron-LM: Training Multi-Billion Parameter Language Models",
+            "The Pile: An 800GB Dataset for Language Modeling",
+            "LLaMA: Open and Efficient Foundation Language Models (Meta AI 2023)"
+          ]
+        },
+        {
+          name: "Instruction Tuning and RLHF",
+          tag: "advanced",
+          desc: "Supervised Fine-Tuning (SFT) on instruction-response pairs teaches the model to follow instructions. But SFT alone produces mediocre assistants. RLHF (Reinforcement Learning from Human Feedback): train a reward model on human preference comparisons, then optimize the language model using PPO to maximize reward while staying close to the SFT policy (KL divergence penalty). InstructGPT (OpenAI 2022) first demonstrated this pipeline publicly. Constitutional AI (Anthropic): self-critique and revision. DPO (Direct Preference Optimization, 2023) bypasses the reward model entirely — shown to be equivalent to RLHF with a specific implicit reward model. GRPO (Group Relative Policy Optimization, DeepSeek-R1) achieves reasoning at lower compute cost.",
+          master: [
+            "Explain the three stages of RLHF: SFT, reward modeling, PPO fine-tuning",
+            "Understand why the KL penalty in PPO prevents the model from drifting too far from the SFT policy",
+            "Derive why DPO is equivalent to RLHF with a specific implicit reward parameterization",
+            "Know what Constitutional AI (RLAIF) is and why it reduces human annotation cost",
+            "Understand the reward hacking problem: models finding shortcuts to maximize reward",
+            "Know what GRPO is and why it's more compute-efficient than PPO for reasoning",
+            "Explain why models trained only on SFT tend to have poor calibration"
+          ],
+          res: [
+            "Training Language Models to Follow Instructions with Human Feedback (InstructGPT 2022)",
+            "Direct Preference Optimization (Rafailov et al. 2023)",
+            "Constitutional AI: Harmlessness from AI Feedback (Anthropic 2022)",
+            "DeepSeek-R1 Technical Report (2025)"
+          ]
+        },
+        {
+          name: "Efficient Fine-Tuning",
+          tag: "advanced",
+          desc: "Full fine-tuning of a 7B+ parameter model requires massive GPU memory. Parameter-efficient fine-tuning (PEFT) methods train only a small subset of parameters. LoRA (Low-Rank Adaptation): freeze the pre-trained weights and inject trainable low-rank matrices A and B into attention layers — the update is W = W₀ + BA where B∈R^(d×r), A∈R^(r×k), r << d. QLoRA: quantize the frozen weights to 4-bit NF4, use double quantization, and fine-tune LoRA adapters in 16-bit. This enables fine-tuning a 65B model on a single 48GB GPU. Prompt tuning, prefix tuning, IA³ as lighter alternatives. GaLore for pre-training in reduced memory.",
+          master: [
+            "Explain the mathematical insight behind LoRA: weight updates are low-rank in fine-tuning",
+            "Understand NF4 quantization in QLoRA: why Normal Float 4 is optimal for normal distributions",
+            "Know how to set LoRA rank and alpha hyperparameters — what do they control?",
+            "Compare LoRA vs prefix tuning vs prompt tuning for different task types",
+            "Understand what happens when you merge LoRA weights back into the base model",
+            "Fine-tune a 7B model with QLoRA on a single 24GB GPU end to end",
+            "Know the intrinsic dimensionality hypothesis: why low rank is sufficient for fine-tuning"
+          ],
+          res: [
+            "LoRA: Low-Rank Adaptation of Large Language Models (Hu et al. 2021)",
+            "QLoRA: Efficient Finetuning of Quantized LLMs (Dettmers et al. 2023)",
+            "Hugging Face PEFT documentation",
+            "The Practical Guides for Large Language Models"
+          ]
+        }
+      ]
+    },
+    {
+      name: "Computer Vision and Multimodal AI",
+      level: "advanced",
+      tagline: "Teaching machines to see and understand",
+      desc: "Vision has been transformed by the same architectures as language. Vision Transformers (ViT) now dominate large-scale image recognition. CLIP connected vision and language in a shared embedding space. Diffusion models generate photorealistic images. Multimodal models (GPT-4V, LLaVA, Gemini) process images and text together. This phase covers modern vision deep learning from CNNs to diffusion.",
+      topics: [
+        {
+          name: "Vision Transformers and Modern CNN Architectures",
+          tag: "advanced",
+          desc: "Vision Transformer (ViT): split image into fixed-size patches, project each to an embedding, add positional embeddings, apply standard Transformer encoder. At scale, ViT outperforms CNNs trained with fewer resources. Swin Transformer: hierarchical ViT with shifted windows for locality, downsampling for multi-scale processing. DeiT: data-efficient image Transformers via distillation. EfficientNet compound scaling. ConvNeXt: pure CNN modernized with Transformer design principles — layer norm, inverted bottleneck, large kernels. DINO and DINOv2: self-supervised ViT training that learns strong features without labels.",
+          master: [
+            "Explain why ViT needs large training data while CNNs work with less",
+            "Understand the patch embedding projection: why 16×16 patches?",
+            "Explain Swin's shifted window attention and why it reduces memory from O(n²) to O(n)",
+            "Know the difference between supervised ViT and self-supervised DINO features",
+            "Understand the compound scaling principle in EfficientNet: width, depth, resolution",
+            "Explain why ConvNeXt outperforms standard CNNs despite using only convolutions",
+            "Compare ViT vs CNN for different dataset sizes and tasks"
+          ],
+          res: [
+            "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (ViT paper)",
+            "Swin Transformer: Hierarchical Vision Transformer using Shifted Windows",
+            "Training data-efficient image transformers (DeiT paper)",
+            "Emerging Properties in Self-Supervised Vision Transformers (DINO paper)"
+          ]
+        },
+        {
+          name: "Generative Models: VAEs and GANs",
+          tag: "advanced",
+          desc: "Variational Autoencoders (VAE): encoder maps input to a distribution (mean and variance) in latent space, decoder reconstructs from samples of that distribution. The ELBO objective: reconstruction loss + KL divergence regularizer. The reparameterization trick enables backpropagation through sampling. Generative Adversarial Networks (GAN): generator and discriminator play a minimax game. Wasserstein GAN: use earth mover distance for more stable training. Progressive GAN, StyleGAN2 (AdaIN, mapping network). Conditional generation, image-to-image translation (pix2pix, CycleGAN).",
+          master: [
+            "Derive the VAE ELBO from first principles as a lower bound on log p(x)",
+            "Explain the reparameterization trick: why you cannot backprop through a sample without it",
+            "Understand mode collapse in GANs and the techniques used to prevent it",
+            "Explain why Wasserstein distance is superior to Jensen-Shannon divergence for GANs",
+            "Know how StyleGAN2's AdaIN layers control style at different scales",
+            "Understand the disentanglement problem in latent spaces",
+            "Explain why VAEs produce blurry images compared to GANs"
+          ],
+          res: [
+            "Auto-Encoding Variational Bayes (Kingma & Welling 2013)",
+            "Generative Adversarial Networks (Goodfellow et al. 2014)",
+            "Progressive Growing of GANs (Karras et al. 2018)",
+            "Analyzing and Improving the Image Quality of StyleGAN (StyleGAN2 2020)"
+          ]
+        },
+        {
+          name: "Diffusion Models",
+          tag: "advanced",
+          desc: "Diffusion models are the current state of the art for image generation. The forward process gradually adds Gaussian noise to an image over T steps until it becomes pure noise. The reverse process learns to denoise step by step. The key insight: you can parameterize the reverse process as predicting the noise added at each step. DDPM training: simply train a UNet to predict ε given the noisy image and timestep. DDIM: deterministic sampling, 10-50× fewer steps. Classifier-free guidance (CFG): combine conditional and unconditional predictions to improve quality. Latent diffusion (Stable Diffusion): work in a compressed VAE latent space for efficiency. Flow matching: simpler formulation with straight paths.",
+          master: [
+            "Derive the DDPM forward process closed form: x_t = √ᾱ_t x_0 + √(1-ᾱ_t) ε",
+            "Explain why the loss simplifies to just predicting the noise ε",
+            "Understand classifier-free guidance: the tradeoff between quality and diversity",
+            "Explain why latent diffusion is 4-8× more compute efficient than pixel-space diffusion",
+            "Understand DDIM: how to make sampling deterministic and 10× faster",
+            "Know the difference between v-prediction and ε-prediction parameterizations",
+            "Explain flow matching and why straight trajectories are more efficient"
+          ],
+          res: [
+            "Denoising Diffusion Probabilistic Models (Ho et al. 2020)",
+            "Denoising Diffusion Implicit Models (Song et al. 2020 — DDIM)",
+            "High-Resolution Image Synthesis with Latent Diffusion Models (Rombach 2022)",
+            "Flow Matching for Generative Modeling (Lipman et al. 2022)"
+          ]
+        }
+      ]
+    },
+    {
+      name: "Advanced Research Topics",
+      level: "expert",
+      tagline: "The active research frontier",
+      desc: "These are the areas where PhD theses are written today. Mechanistic interpretability (understanding what computations transformers perform), graph neural networks (learning on structured data), reinforcement learning for decision making, and world models. Mastery here means you can read, understand, critique, and extend papers in these areas.",
+      topics: [
         {
           name: "Mechanistic Interpretability",
           tag: "research",
-          desc: "Reverse-engineering what neural networks compute. Circuit analysis (Elhage et al. 2021). Superposition hypothesis: how models pack more features than dimensions via interference. Sparse autoencoders (SAEs) for monosemantic feature extraction. Activation patching and causal tracing. TransformerLens. Attention head roles: induction heads, copy-suppression heads, name-mover heads.",
+          desc: "Reverse-engineering what neural networks actually compute. Circuit analysis: identifying minimal subgraphs of the network that implement specific behaviors. The superposition hypothesis: models represent more features than they have neurons because features are nearly orthogonal and co-activate rarely. Sparse Autoencoders (SAEs) as a tool for extracting monosemantic features from polysemantic neurons. Activation patching and causal tracing: surgically intervening in activations to identify which components are responsible for specific behaviors. Induction heads: the mechanism behind in-context learning in transformers. ROME and MEMIT: locating and editing factual memories.",
           master: [
-            "Run activation patching on GPT-2 to identify indirect object identification (IOI) circuits",
-            "Train a sparse autoencoder on MLP activations and analyze discovered features",
-            "Reproduce the induction head formation during in-context learning",
-            "Implement causal tracing (ROME-style) to localize factual memories",
-            "Understand superposition: prove that n orthogonal features can be stored in d<n dims",
-            "Apply SAE to a frontier model and analyze polysemantic neurons",
-            "Contribute to ARENA or Alignment Forum with original interpretability work"
+            "Run activation patching on GPT-2 to identify the indirect object identification circuit",
+            "Train a sparse autoencoder on MLP activations and analyze the discovered features",
+            "Reproduce induction head formation from scratch in a 2-layer attention-only model",
+            "Implement causal tracing to localize factual associations in a small LM",
+            "Understand the superposition hypothesis and its implications for interpretability",
+            "Use TransformerLens to analyze attention patterns in a real transformer",
+            "Read and summarize a recent mechanistic interpretability paper from Anthropic"
           ],
-          deepdive: "The superposition hypothesis explains why models can represent more features than neurons. Instead of each neuron representing one concept (monosemanticity), models encode features as nearly orthogonal vectors in a higher-dimensional 'neuron basis' than the feature dimension. This allows storing O(d²) features in d dimensions via interference patterns that are linearly separable only when read by a second layer. SAEs recover these features by learning a sparse overcomplete basis.",
+          deepdive: "The superposition hypothesis explains why neurons are polysemantic. A model with d neurons can represent up to O(d²) features if those features are sparse enough — they interfere but rarely activate together. SAEs recover these features by learning a sparse overcomplete basis. The consequence for safety is significant: it means that 'feature directions' in activation space are more fundamental than neurons, and that current neural networks are fundamentally harder to interpret than we thought.",
           res: [
-            "A Mathematical Framework for Transformer Circuits (Anthropic 2021)",
-            "Toy Models of Superposition (Elhage 2022)",
-            "Sparse Autoencoders Find Highly Interpretable Features (Anthropic 2023)",
-            "TransformerLens documentation and tutorials"
+            "A Mathematical Framework for Transformer Circuits (Elhage et al., Anthropic 2021)",
+            "Toy Models of Superposition (Elhage et al., Anthropic 2022)",
+            "Towards Monosemanticity (Bricken et al., Anthropic 2023)",
+            "ARENA: Alignment Research Engineer Accelerator (practical mechanistic interp course)"
+          ]
+        },
+        {
+          name: "Reinforcement Learning",
+          tag: "advanced",
+          desc: "An agent interacts with an environment, observes states, takes actions, and receives rewards. The goal: learn a policy π(a|s) that maximizes expected cumulative reward. Markov Decision Processes (MDP) formalism. Value functions: V(s) (expected return from state s), Q(s,a) (expected return from state s, taking action a). Bellman equations. Model-free methods: Q-learning (off-policy, convergence guarantee), SARSA (on-policy). Deep Q-Network (DQN): approximate Q with a neural network, experience replay, target network. Policy gradient theorem: directly optimize policy via gradient ascent on expected reward. REINFORCE algorithm. Actor-critic (A3C, A2C, PPO). AlphaGo/AlphaZero: Monte Carlo Tree Search + deep RL.",
+          master: [
+            "Derive the Bellman optimality equation for Q*(s,a)",
+            "Explain the exploration-exploitation tradeoff and ε-greedy strategies",
+            "Understand why experience replay stabilizes DQN training",
+            "Derive the policy gradient theorem and the REINFORCE algorithm",
+            "Understand PPO's clipped surrogate objective and why it prevents large policy updates",
+            "Explain value-based vs policy-based vs actor-critic methods and their tradeoffs",
+            "Implement a DQN agent that solves CartPole or a simple Atari game"
+          ],
+          res: [
+            "Reinforcement Learning: An Introduction (Sutton & Barto — free PDF, canonical)",
+            "Spinning Up in Deep RL (OpenAI — free, practical RL introduction)",
+            "Proximal Policy Optimization Algorithms (Schulman et al. 2017 — PPO paper)",
+            "Human-level control through deep reinforcement learning (DQN/Atari paper 2015)"
+          ]
+        },
+        {
+          name: "Graph Neural Networks",
+          tag: "advanced",
+          desc: "Graphs are the natural representation for molecules, social networks, knowledge graphs, and citation networks. Graph Neural Networks (GNNs) generalize deep learning to graph-structured data via the message passing framework: each node aggregates information from its neighbors, updates its representation, and repeats for k layers. GCN (Kipf & Welling): spectral convolution simplified to a neighborhood aggregation. GraphSAGE: inductive learning via neighborhood sampling. GAT: attention-weighted neighbor aggregation. GIN (Graph Isomorphism Network): provably most expressive MPNN, matches Weisfeiler-Lehman graph isomorphism test. Applications: molecular property prediction (drug discovery), knowledge graph completion, recommendation systems.",
+          master: [
+            "Derive the GCN update rule from spectral graph convolution",
+            "Understand the Weisfeiler-Lehman test and why standard GNNs cannot exceed its expressiveness",
+            "Explain how GIN achieves WL-level expressiveness via injective aggregation",
+            "Understand over-smoothing: why stacking many GNN layers hurts performance",
+            "Apply a GNN to molecular property prediction — the canonical graph learning task",
+            "Understand graph attention (GAT) and how attention weights are computed",
+            "Know the difference between transductive (fixed graph) and inductive (new nodes) learning"
+          ],
+          res: [
+            "Semi-Supervised Classification with Graph Convolutional Networks (Kipf & Welling 2016)",
+            "How Powerful are Graph Neural Networks? (Xu et al. 2018 — GIN paper)",
+            "Graph Attention Networks (Veličković et al. 2017)",
+            "Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges (Bronstein et al.)"
+          ]
+        }
+      ]
+    },
+    {
+      name: "Production AI Systems",
+      level: "expert",
+      tagline: "From research to real-world impact",
+      desc: "A model that only works in a notebook is not useful. Production AI requires MLOps, serving infrastructure, monitoring, evaluation, and responsible deployment practices. This phase bridges the gap between research and engineering.",
+      topics: [
+        {
+          name: "MLOps and Model Serving",
+          tag: "advanced",
+          desc: "ML pipelines in production: data versioning (DVC), experiment tracking (MLflow, Weights & Biases), model registry, automated retraining. Feature stores (Feast, Tecton). Model serving: REST API serving (FastAPI + model), batching strategies, latency vs throughput tradeoffs. Inference optimization: ONNX export, TorchScript, quantization (int8, int4 post-training, QAT), knowledge distillation, pruning. For LLMs specifically: vLLM (PagedAttention for efficient KV-cache management), TensorRT-LLM, continuous batching. A/B testing, canary deployments, shadow mode.",
+          master: [
+            "Set up an experiment tracking pipeline with Weights & Biases for model training",
+            "Quantize a model to int8 and compare accuracy vs latency tradeoffs",
+            "Deploy a model as a REST API with FastAPI and benchmark its throughput",
+            "Implement continuous batching for LLM serving and understand why it's critical",
+            "Understand PagedAttention (vLLM): why fragmented KV cache wastes GPU memory",
+            "Set up model monitoring: data drift detection, performance degradation alerts",
+            "Design a feature store for a recommendation system"
+          ],
+          res: [
+            "Designing Machine Learning Systems (Chip Huyen — practical MLOps guide)",
+            "vLLM: Easy, Fast, and Cheap LLM Serving (paper and documentation)",
+            "ML Engineering (Andriy Burkov)",
+            "Made With ML (madewithml.com — free MLOps course)"
+          ]
+        },
+        {
+          name: "AI Evaluation and Benchmarking",
+          tag: "advanced",
+          desc: "You cannot improve what you cannot measure. Evaluation for language models: perplexity, BLEU, ROUGE, BERTScore (all flawed in different ways). Benchmark suites: MMLU (massive multitask language understanding), HellaSwag (commonsense reasoning), HumanEval (code generation), TruthfulQA (hallucination), GSM8K (grade school math reasoning). LLM-as-a-judge: using GPT-4 or Claude to score outputs. Evals for safety: toxicity (Perspective API), bias benchmarks. Red-teaming: adversarial prompting to find failure modes. The problem of benchmark contamination: models trained on data that includes benchmark answers.",
+          master: [
+            "Understand the limitations of BLEU and when BERTScore is more appropriate",
+            "Know the major LLM benchmarks and what each actually measures",
+            "Design a custom evaluation suite for a specific domain application",
+            "Understand benchmark contamination and how to detect it",
+            "Implement LLM-as-judge evaluation with a scoring rubric",
+            "Conduct structured red-teaming of an LLM application",
+            "Understand the Elo rating system used by LMSYS Chatbot Arena"
+          ],
+          res: [
+            "MMLU: Measuring Massive Multitask Language Understanding (Hendrycks 2020)",
+            "Holistic Evaluation of Language Models (HELM, Stanford CRFM)",
+            "TruthfulQA paper (Lin et al. 2021)",
+            "Language Model Evaluation Harness (EleutherAI — framework)"
+          ]
+        },
+        {
+          name: "AI Safety and Responsible AI",
+          tag: "research",
+          desc: "As AI systems become more capable, their alignment with human values becomes critical. Alignment problem: ensuring powerful AI systems do what we want. Inner alignment: the model optimizes for the intended objective. Outer alignment: the specified objective matches the true objective. Reward hacking. Scalable oversight: how to supervise systems more capable than humans (debate, recursive reward modeling). Constitutional AI and RLAIF. Interpretability as a safety tool. Emergent capabilities and unpredictability at scale. AI governance and policy. This is one of the most important open research problems.",
+          master: [
+            "Explain the distinction between inner and outer alignment problems",
+            "Understand reward hacking with concrete examples from RL and RLHF",
+            "Know what scalable oversight means and why it's necessary",
+            "Understand the debate over whether capability and safety research are complementary or in tension",
+            "Read and summarize at least 3 AI safety research papers",
+            "Explain why interpretability matters for safety — not just explainability",
+            "Understand the arguments for and against different timelines for transformative AI"
+          ],
+          res: [
+            "Concrete Problems in AI Safety (Amodei et al. 2016 — foundational paper)",
+            "Superintelligence (Nick Bostrom — philosophical case for safety)",
+            "The Alignment Forum (alignmentforum.org — research community)",
+            "Anthropic's Core Views and research agenda (anthropic.com)"
           ]
         }
       ]

